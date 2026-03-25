@@ -16,7 +16,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: var(--primary-bg); color: var(--text-light); overflow-x: hidden; }
 
-        /* 4. RESPONSIVE NAVBAR */
         .navbar {
             position: sticky; top: 0; background-color: rgba(4, 28, 35, 0.95);
             backdrop-filter: blur(10px); display: flex; justify-content: space-between;
@@ -24,18 +23,42 @@
             z-index: 1000; flex-wrap: wrap; gap: 1rem;
         }
 
-        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); cursor: pointer; }
-        .nav-links { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-        .nav-links li { cursor: pointer; font-weight: 500; transition: color 0.3s; }
-        .nav-links li:hover { color: var(--accent-color); }
+        /* 4. HOVER EFFECTS & FEEL */
+        .logo { 
+            font-size: 1.8rem; font-weight: bold; color: var(--accent-color); 
+            cursor: pointer; transition: all 0.3s ease; 
+        }
+        .logo:hover { 
+            transform: scale(1.05); text-shadow: 0 0 15px var(--accent-color); 
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+        .nav-links li { 
+            cursor: pointer; font-weight: 500; transition: all 0.3s ease; 
+            padding: 5px 0; position: relative;
+        }
+        .nav-links li:hover { 
+            color: var(--accent-color); transform: translateY(-2px); 
+        }
+        
+        /* Active Category Highlight */
+        .nav-links li.active { 
+            color: var(--accent-color); text-shadow: 0 0 8px rgba(33, 230, 193, 0.6); 
+        }
+        .nav-links li.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; 
+            height: 2px; background-color: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
 
         .search-container { position: relative; flex-grow: 1; max-width: 400px; }
         #search-box {
             padding: 0.6rem 1rem; width: 100%; border-radius: 20px; border: 1px solid var(--accent-color);
             background-color: var(--secondary-bg); color: var(--text-light); outline: none;
+            transition: box-shadow 0.3s ease;
         }
+        #search-box:focus { box-shadow: 0 0 10px rgba(33, 230, 193, 0.5); }
 
-        /* 3. LIVE SEARCH SUGGESTIONS */
         .suggestions-box {
             position: absolute; top: 110%; left: 0; width: 100%; background-color: var(--primary-bg);
             border: 1px solid var(--accent-color); border-radius: 10px; overflow: hidden;
@@ -53,29 +76,32 @@
         .section-title { margin-bottom: 1.5rem; color: var(--accent-color); border-left: 4px solid var(--accent-color); padding-left: 10px; text-transform: capitalize; }
         .hidden { display: none !important; }
 
-        /* RESPONSIVE HERO SECTION */
         .hero-picks { display: flex; gap: 2rem; height: 45vh; margin-bottom: 3rem; }
         .hero-card {
             flex: 1; border-radius: 10px; overflow: hidden; position: relative;
             cursor: pointer; transition: transform 0.3s; border: 1px solid var(--secondary-bg);
             display: flex; justify-content: center; align-items: center; background-color: #000;
         }
-        .hero-card:hover { transform: scale(1.02); border-color: var(--accent-color); }
+        .hero-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .hero-bg { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; object-fit: cover; filter: blur(25px) opacity(0.4); z-index: 1; }
         .hero-poster { height: 95%; width: auto; max-width: 100%; object-fit: contain; z-index: 2; box-shadow: 0 0 20px rgba(0,0,0,0.8); border-radius: 8px; }
-        .hero-info {
-            position: absolute; bottom: 0; left: 0; padding: 2rem 1.5rem 1.5rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.95)); width: 100%; z-index: 3; text-align: center;
+        .hero-info { position: absolute; bottom: 0; left: 0; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.95)); width: 100%; z-index: 3; text-align: center; }
+
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+        
+        /* 3. TODAY'S PICK 5x2 LAYOUT */
+        .movie-grid.pick-layout { 
+            grid-template-columns: repeat(5, 1fr); 
+            max-width: 1200px; margin: 0 auto; 
         }
 
-        /* RESPONSIVE GRID */
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
         .movie-card {
             background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer;
-            transition: transform 0.3s; text-align: center; padding-bottom: 10px;
+            transition: all 0.3s ease; text-align: center; padding-bottom: 10px;
             position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .movie-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
+        .movie-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 15px rgba(0,0,0,0.6); }
         .movie-card img { width: 100%; height: 280px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #000; }
         .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -86,16 +112,12 @@
             z-index: 5; font-size: 1.1rem; border: 2px solid var(--primary-bg); box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
 
-        /* 1. ENDLESS SCROLL LOADER */
         .loading-trigger { height: 60px; display: flex; justify-content: center; align-items: center; color: var(--accent-color); font-weight: bold; margin-top: 2rem; }
 
-        /* RESPONSIVE MODAL */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
-        .modal-content {
-            background-color: var(--primary-bg); padding: 2rem; border-radius: 10px; width: 95%;
-            max-width: 1000px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--accent-color);
-        }
-        .close-btn { position: absolute; top: 10px; right: 20px; font-size: 2.5rem; color: var(--accent-color); cursor: pointer; z-index: 10; }
+        .modal-content { background-color: var(--primary-bg); padding: 2rem; border-radius: 10px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--accent-color); }
+        .close-btn { position: absolute; top: 10px; right: 20px; font-size: 2.5rem; color: var(--accent-color); cursor: pointer; z-index: 10; transition: transform 0.2s; }
+        .close-btn:hover { transform: scale(1.2); }
         .modal-body { display: flex; gap: 2rem; flex-wrap: wrap; }
         .modal-poster { width: 300px; height: auto; max-height: 450px; object-fit: contain; border-radius: 8px; }
         .modal-details { flex: 1; min-width: 250px; }
@@ -104,7 +126,11 @@
         .trailer-container { margin-top: 20px; width: 100%; aspect-ratio: 16 / 9; }
         .trailer-container iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
 
-        /* MOBILE SPECIFIC FIXES */
+        @media (max-width: 900px) {
+            /* Disable the 5-row forced layout on smaller screens so it doesn't squish */
+            .movie-grid.pick-layout { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+
         @media (max-width: 768px) {
             .navbar { flex-direction: column; text-align: center; }
             .nav-links { justify-content: center; font-size: 0.9rem; }
@@ -121,9 +147,10 @@
 
     <nav class="navbar">
         <div class="logo" id="site-logo">Screen Critique</div>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-list">
             <li data-category="upcoming">Upcoming</li>
-            <li data-category="trending">Trending</li>
+            <li data-category="trending" class="active">Home (Trending)</li>
+            <li data-category="underrated">Underrated</li>
             <li data-category="best">Best Ever</li>
             <li data-category="pick">Today's Pick</li>
         </ul>
@@ -165,53 +192,59 @@
             heroPicks: document.getElementById('hero-picks'),
             loadingTrigger: document.getElementById('loading-trigger'),
             modal: document.getElementById('movie-modal'),
-            modalBody: document.getElementById('modal-body')
+            modalBody: document.getElementById('modal-body'),
+            navItems: document.querySelectorAll('#nav-list li')
         };
 
-        // Endless Scroll State
         let currentCategory = 'trending';
         let currentPage = 1;
         let isFetching = false;
         let infiniteScrollEnabled = true;
         let searchDebounceTimer;
 
-        // Core Init
         document.addEventListener('DOMContentLoaded', () => {
             loadHeroPicks();
             loadCategory('trending', true);
             setupIntersectionObserver();
         });
 
-        // Navigation
+        // Highlight active tab logic
+        function setActiveTab(category) {
+            DOM.navItems.forEach(item => {
+                if (item.getAttribute('data-category') === category) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
         DOM.logo.addEventListener('click', () => {
             resetSearch();
             DOM.heroContainer.classList.remove('hidden');
+            setActiveTab('trending');
             loadCategory('trending', true);
         });
 
-        document.querySelectorAll('.nav-links li').forEach(item => {
+        DOM.navItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 resetSearch();
                 DOM.heroContainer.classList.add('hidden');
-                loadCategory(e.target.getAttribute('data-category'), true);
+                const cat = e.target.getAttribute('data-category');
+                setActiveTab(cat);
+                loadCategory(cat, true);
             });
         });
 
-        // 3. LIVE SEARCH RECOMMENDATIONS (Debounced)
         DOM.searchBox.addEventListener('input', (e) => {
             clearTimeout(searchDebounceTimer);
             const query = e.target.value.trim();
-            
-            if (query.length < 3) {
-                DOM.suggestions.classList.add('hidden');
-                return;
-            }
+            if (query.length < 3) { DOM.suggestions.classList.add('hidden'); return; }
 
             searchDebounceTimer = setTimeout(async () => {
                 try {
                     const res = await fetch(`${API_BASE}/anime?q=${encodeURIComponent(query)}&limit=5&sfw=true`);
                     const data = await res.json();
-                    
                     DOM.suggestions.innerHTML = '';
                     if(data.data && data.data.length > 0) {
                         data.data.forEach(anime => {
@@ -221,32 +254,28 @@
                                 <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
                                 <div><strong>${anime.title_english || anime.title}</strong><br><small>★ ${anime.score || 'N/A'}</small></div>
                             `;
-                            item.onclick = () => {
-                                DOM.suggestions.classList.add('hidden');
-                                openModal(anime);
-                            };
+                            item.onclick = () => { DOM.suggestions.classList.add('hidden'); openModal(anime); };
                             DOM.suggestions.appendChild(item);
                         });
                         DOM.suggestions.classList.remove('hidden');
-                    } else {
-                        DOM.suggestions.classList.add('hidden');
                     }
-                } catch(e) { console.error(e); }
-            }, 600); // 600ms wait so we don't spam the API while typing
+                } catch(e) {}
+            }, 600);
         });
 
-        // Full Search on Enter
         DOM.searchBox.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && DOM.searchBox.value.trim()) {
-                DOM.suggestions.classList.add('hidden');
+                resetSearch();
                 DOM.heroContainer.classList.add('hidden');
+                setActiveTab(''); // Clear highlights when searching
                 const query = DOM.searchBox.value.trim();
                 DOM.gridTitle.innerText = `Search Results: ${query}`;
                 currentCategory = 'search';
-                infiniteScrollEnabled = false; // Disable endless scroll for search
+                infiniteScrollEnabled = false;
                 DOM.loadingTrigger.classList.add('hidden');
                 
                 DOM.mainGrid.innerHTML = '<h2>Loading...</h2>';
+                DOM.mainGrid.classList.remove('pick-layout');
                 const res = await fetch(`${API_BASE}/anime?q=${encodeURIComponent(query)}&sfw=true`);
                 const data = await res.json();
                 
@@ -255,32 +284,19 @@
             }
         });
 
-        // Hide suggestions when clicking outside
-        document.addEventListener('click', (e) => {
-            if(!DOM.searchBox.contains(e.target) && !DOM.suggestions.contains(e.target)) {
-                DOM.suggestions.classList.add('hidden');
-            }
-        });
+        function resetSearch() { DOM.searchBox.value = ''; DOM.suggestions.classList.add('hidden'); }
 
-        function resetSearch() {
-            DOM.searchBox.value = '';
-            DOM.suggestions.classList.add('hidden');
-        }
-
-        // Hero Picks
         async function loadHeroPicks() {
             try {
                 const res = await fetch(`${API_BASE}/top/anime?filter=bypopularity&limit=5`);
                 const data = await res.json();
                 const topTwo = data.data.slice(0, 2);
-                
                 DOM.heroPicks.innerHTML = '';
                 topTwo.forEach(anime => {
                     const card = document.createElement('div');
                     card.className = 'hero-card';
                     card.onclick = () => openModal(anime);
                     const poster = anime.images.jpg.large_image_url;
-                    
                     card.innerHTML = `
                         <img src="${poster}" class="hero-bg" alt="blur-bg">
                         <img src="${poster}" class="hero-poster" alt="${anime.title}">
@@ -291,10 +307,9 @@
                     `;
                     DOM.heroPicks.appendChild(card);
                 });
-            } catch(e) { console.error("Hero picks failed", e); }
+            } catch(e) {}
         }
 
-        // 1 & 2. CATEGORY LOADING (With Endless Scroll & Daily Picks)
         async function loadCategory(catKey, isNewCategory = false) {
             if(isFetching) return;
             isFetching = true;
@@ -303,62 +318,98 @@
                 currentCategory = catKey;
                 currentPage = 1;
                 DOM.mainGrid.innerHTML = '';
-                // Disable endless scroll for "pick", enable for others
                 infiniteScrollEnabled = (catKey !== 'pick'); 
                 
                 if (infiniteScrollEnabled) DOM.loadingTrigger.classList.remove('hidden');
                 else DOM.loadingTrigger.classList.add('hidden');
+
+                // 3. APPLY 5x2 LAYOUT FOR PICK
+                if (catKey === 'pick') DOM.mainGrid.classList.add('pick-layout');
+                else DOM.mainGrid.classList.remove('pick-layout');
             }
 
-            let endpoint = '';
+            let animes = [];
             let isRankedPick = false;
 
-            if (catKey === 'trending') {
-                DOM.gridTitle.innerText = "Currently Trending Anime";
-                endpoint = `/top/anime?filter=airing&page=${currentPage}`;
-            } 
-            else if (catKey === 'upcoming') {
-                DOM.gridTitle.innerText = "Highly Hyped Upcoming Anime";
-                endpoint = `/top/anime?filter=upcoming&page=${currentPage}`;
-            } 
-            else if (catKey === 'best') {
-                DOM.gridTitle.innerText = "Highest Rated Anime Ever";
-                endpoint = `/top/anime?page=${currentPage}`;
-            } 
-            else if (catKey === 'pick') {
-                DOM.gridTitle.innerText = "Today's Top 10 Picks";
-                endpoint = `/top/anime?filter=favorite&page=1`; 
-                isRankedPick = true;
-            }
-
             try {
-                const res = await fetch(`${API_BASE}${endpoint}`);
-                const data = await res.json();
-                
-                let animes = data.data;
+                // 1. HOME PAGE 50/50 MIXTURE LOGIC
+                if (catKey === 'trending') {
+                    DOM.gridTitle.innerText = "Trending & Underrated Mix";
+                    // We fetch popular hits AND jump 15 pages deep to find great underrated shows simultaneously
+                    const [popRes, undRes] = await Promise.all([
+                        fetch(`${API_BASE}/top/anime?filter=airing&page=${currentPage}`),
+                        fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 15}&min_score=7.5`)
+                    ]);
+                    const popData = await popRes.json();
+                    const undData = await undRes.json();
 
-                // 2. DAILY PICKS LOGIC (Math to change 10 items daily)
-                if (isRankedPick && animes.length > 0) {
-                    const dayOfMonth = new Date().getDate(); // Gets 1 - 31
-                    const startIdx = dayOfMonth % 15; // Creates a shifting window
-                    animes = animes.slice(startIdx, startIdx + 10);
+                    // Interleave them 1 by 1
+                    const maxLength = Math.max(popData.data.length, undData.data.length);
+                    for(let i=0; i<maxLength; i++) {
+                        if(popData.data[i]) animes.push(popData.data[i]);
+                        if(undData.data[i]) animes.push(undData.data[i]);
+                    }
+                    
+                    if (!popData.pagination.has_next_page) infiniteScrollEnabled = false;
+                } 
+                // 2. UNDERRATED TAB LOGIC
+                else if (catKey === 'underrated') {
+                    DOM.gridTitle.innerText = "Hidden Gems & Underrated Masterpieces";
+                    const res = await fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 15}&min_score=7.5`);
+                    const data = await res.json();
+                    animes = data.data;
+                    if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
+                }
+                else if (catKey === 'upcoming') {
+                    DOM.gridTitle.innerText = "Highly Hyped Upcoming Anime";
+                    const res = await fetch(`${API_BASE}/top/anime?filter=upcoming&page=${currentPage}`);
+                    const data = await res.json();
+                    animes = data.data;
+                    if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
+                } 
+                else if (catKey === 'best') {
+                    DOM.gridTitle.innerText = "Highest Rated Anime Ever";
+                    const res = await fetch(`${API_BASE}/top/anime?page=${currentPage}`);
+                    const data = await res.json();
+                    animes = data.data;
+                    if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
+                } 
+                else if (catKey === 'pick') {
+                    DOM.gridTitle.innerText = "Today's Top 10 Picks";
+                    const res = await fetch(`${API_BASE}/top/anime?filter=favorite&page=1`);
+                    const data = await res.json();
+                    const dayOfMonth = new Date().getDate(); 
+                    const startIdx = dayOfMonth % 15; 
+                    animes = data.data.slice(startIdx, startIdx + 10);
+                    isRankedPick = true;
                 }
 
-                // Filter for missing posters/trailers
                 animes = animes.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
-
                 renderGrid(animes, isRankedPick, isNewCategory);
                 
-                // If API returns empty, turn off infinite scroll
-                if (!data.pagination || !data.pagination.has_next_page) {
-                    infiniteScrollEnabled = false;
-                    DOM.loadingTrigger.classList.add('hidden');
-                }
+                if (!infiniteScrollEnabled) DOM.loadingTrigger.classList.add('hidden');
+
             } catch (error) {
-                console.error("Fetch error", error);
+                console.error(error);
             } finally {
                 isFetching = false;
+                
+                // 5. LARGE SCREEN AUTO-FILL FIX
+                // If we finished fetching, and the loading text is STILL visible on screen (meaning the screen isn't full yet)
+                // We wait half a second so we don't crash the API, and fetch the next page automatically!
+                if (infiniteScrollEnabled && isTriggerVisible()) {
+                    setTimeout(() => {
+                        currentPage++;
+                        loadCategory(currentCategory, false);
+                    }, 500); 
+                }
             }
+        }
+
+        // Helper to check if the bottom loader is visible
+        function isTriggerVisible() {
+            const rect = DOM.loadingTrigger.getBoundingClientRect();
+            return (rect.top >= 0 && rect.top <= window.innerHeight);
         }
 
         function renderGrid(animes, isRankedPick, isNewCategory) {
@@ -374,7 +425,6 @@
                 
                 const poster = anime.images.jpg.large_image_url;
                 const title = anime.title_english || anime.title;
-                
                 let badgeHTML = isRankedPick ? `<div class="rank-badge">${index + 1}</div>` : '';
 
                 card.innerHTML = `
@@ -386,19 +436,16 @@
             });
         }
 
-        // 1. INTERSECTION OBSERVER (Triggers Endless Scroll)
         function setupIntersectionObserver() {
             const observer = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && infiniteScrollEnabled && !isFetching) {
                     currentPage++;
                     loadCategory(currentCategory, false);
                 }
-            }, { rootMargin: '300px' }); // Loads slightly before the user hits the absolute bottom
-
+            }, { rootMargin: '300px' }); 
             observer.observe(DOM.loadingTrigger);
         }
 
-        // Responsive Modal
         function openModal(anime) {
             const title = anime.title_english || anime.title;
             const genres = anime.genres ? anime.genres.map(g => g.name).join(', ') : 'N/A';
@@ -414,7 +461,6 @@
                     <p><strong>Genres:</strong> ${genres}</p>
                     <p><strong>Score:</strong> ${anime.score || 'N/A'}/10</p>
                     <p><strong>Synopsis:</strong> ${anime.synopsis || 'No synopsis available.'}</p>
-                    
                     ${anime.trailer.embed_url ? `
                     <div class="trailer-container">
                         <iframe src="${anime.trailer.embed_url}" allowfullscreen></iframe>
@@ -425,7 +471,6 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // Close Modal
         const closeAndStopVideo = () => {
             DOM.modal.style.display = 'none';
             document.body.style.overflow = 'auto';
