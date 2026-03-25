@@ -13,213 +13,102 @@
             --text-muted: #7FA9B5;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--primary-bg);
-            color: var(--text-light);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: var(--primary-bg); color: var(--text-light); overflow-x: hidden; }
 
         .navbar {
-            position: sticky;
-            top: 0;
-            background-color: rgba(4, 28, 35, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            border-bottom: 2px solid var(--accent-color);
+            position: sticky; top: 0; background-color: rgba(4, 28, 35, 0.95);
+            backdrop-filter: blur(10px); display: flex; justify-content: space-between;
+            align-items: center; padding: 1rem 2rem; border-bottom: 2px solid var(--accent-color);
             z-index: 1000;
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); cursor: pointer; }
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; }
+        .nav-links li { cursor: pointer; font-weight: 500; transition: color 0.3s; }
+        .nav-links li:hover { color: var(--accent-color); }
 
         #search-box {
-            padding: 0.6rem 1rem;
-            width: 300px;
-            border-radius: 20px;
-            border: 1px solid var(--accent-color);
-            background-color: var(--secondary-bg);
-            color: var(--text-light);
-            outline: none;
+            padding: 0.6rem 1rem; width: 300px; border-radius: 20px; border: 1px solid var(--accent-color);
+            background-color: var(--secondary-bg); color: var(--text-light); outline: none;
         }
 
         .main-content { padding: 2rem; }
-        
-        .section-title {
-            margin-bottom: 1.5rem;
-            color: var(--accent-color);
-            border-left: 4px solid var(--accent-color);
-            padding-left: 10px;
-        }
-
+        .section-title { margin-bottom: 1.5rem; color: var(--accent-color); border-left: 4px solid var(--accent-color); padding-left: 10px; text-transform: capitalize; }
         .hidden { display: none !important; }
 
-        .hero-picks {
-            display: flex;
-            gap: 2rem;
-            height: 45vh;
-            margin-bottom: 3rem;
-        }
-
+        /* Hero Section - Blurred Background Trick to fix head cutoff */
+        .hero-picks { display: flex; gap: 2rem; height: 45vh; margin-bottom: 3rem; }
+        
         .hero-card {
-            flex: 1;
+            flex: 1; border-radius: 10px; overflow: hidden; position: relative;
+            cursor: pointer; transition: transform 0.3s; border: 1px solid var(--secondary-bg);
+            display: flex; justify-content: center; align-items: center;
             background-color: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s;
-            border: 1px solid var(--secondary-bg);
         }
 
-        .hero-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent-color);
+        .hero-card:hover { transform: scale(1.02); border-color: var(--accent-color); }
+
+        /* The Blurred Background */
+        .hero-bg {
+            position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+            object-fit: cover; filter: blur(20px) opacity(0.5); z-index: 1;
         }
 
-        .hero-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.6;
+        /* The actual un-cropped poster */
+        .hero-poster {
+            height: 90%; width: auto; max-width: 100%; object-fit: contain; z-index: 2;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8); border-radius: 8px;
         }
 
         .hero-info {
-            position: absolute;
-            bottom: 0;
-            padding: 1.5rem;
-            background: linear-gradient(transparent, #000);
-            width: 100%;
+            position: absolute; bottom: 0; left: 0; padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            width: 100%; z-index: 3;
         }
 
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+        
         .movie-card {
-            background-color: #000;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            text-align: center;
-            padding-bottom: 10px;
+            background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer;
+            transition: transform 0.3s; text-align: center; padding-bottom: 10px;
             border: 1px solid transparent;
         }
+        .movie-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
+        .movie-card img { width: 100%; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .movie-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-        }
-
-        .movie-card img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .movie-card h3 {
-            font-size: 1rem;
-            padding: 10px 5px 0;
-        }
+        .loading-trigger { height: 50px; width: 100%; margin-top: 2rem; display: flex; justify-content: center; align-items: center; color: var(--accent-color); }
 
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center;
         }
-
         .modal-content {
-            background-color: var(--secondary-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 900px;
-            position: relative;
-            border: 1px solid var(--accent-color);
+            background-color: var(--primary-bg); padding: 2rem; border-radius: 10px; width: 90%;
+            max-width: 1000px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--accent-color);
         }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
-            color: var(--accent-color);
-            cursor: pointer;
-        }
-
-        .modal-body {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .modal-poster {
-            width: 300px;
-            border-radius: 8px;
-        }
-
-        .modal-details h2 { color: var(--accent-color); margin-bottom: 10px; }
-        .modal-details p { margin-bottom: 8px; line-height: 1.5; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--accent-color); cursor: pointer; z-index: 10; }
+        .modal-body { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .modal-poster { width: 300px; border-radius: 8px; object-fit: cover; }
+        .modal-details { flex: 1; min-width: 300px; }
+        .modal-details h2 { color: var(--accent-color); margin-bottom: 10px; font-size: 2rem; }
+        .modal-details p { margin-bottom: 8px; line-height: 1.6; color: var(--text-light); }
         
-        .trailer-box {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #000;
-            text-align: center;
-            border: 1px dashed var(--accent-color);
-            color: var(--text-muted);
-        }
+        .trailer-container { margin-top: 20px; width: 100%; aspect-ratio: 16 / 9; }
+        .trailer-container iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="logo">Screen Critique</div>
+        <div class="logo" id="site-logo">Screen Critique</div>
         <ul class="nav-links">
-            <li><a href="#upcoming">Upcoming</a></li>
-            <li><a href="#trending">Trending</a></li>
-            <li><a href="#best-ever">Best Ever</a></li>
-            <li><a href="#todays-pick">Today's Pick</a></li>
-            <li><a href="#anime">Anime</a></li>
+            <li data-category="upcoming">Upcoming</li>
+            <li data-category="trending">Trending</li>
+            <li data-category="best">Best Ever</li>
+            <li data-category="pick">Today's Pick</li>
+            <li data-category="anime">Anime</li>
         </ul>
         <div class="search-container">
             <input type="text" id="search-box" placeholder="Search movies... (Press Enter)">
@@ -227,129 +116,212 @@
     </nav>
 
     <main class="main-content">
-        <section id="search-section" class="hidden">
-            <h2 class="section-title">Search Results</h2>
-            <div class="movie-grid" id="search-grid"></div>
-        </section>
-
-        <div id="home-view">
+        <div id="hero-container">
             <section class="hero-picks" id="hero-picks"></section>
-
-            <section class="popular-movies">
-                <h2 class="section-title">Other Popular Movies</h2>
-                <div class="movie-grid" id="popular-grid"></div>
-            </section>
         </div>
+
+        <section class="dynamic-movies">
+            <h2 class="section-title" id="grid-title">Trending Movies</h2>
+            <div class="movie-grid" id="main-grid"></div>
+            <div class="loading-trigger" id="loading-trigger">Loading more...</div>
+        </section>
     </main>
 
     <div id="movie-modal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn" id="close-modal">&times;</span>
             <div class="modal-body" id="modal-body"></div>
         </div>
     </div>
 
     <script>
-        const API_KEY = 'e30f5ba0';
-        const BASE_URL = `https://www.omdbapi.com/?apikey=${API_KEY}`;
+        const OMDB_KEY = 'e30f5ba0';
+        
+        // Define Categories using broad OMDB queries and Jikan for Anime
+        const categories = {
+            trending: { api: 'omdb', query: 'marvel', title: 'Trending Hits' },
+            upcoming: { api: 'omdb', query: 'spider', y: '2024', title: 'Upcoming & Recent Releases' },
+            best: { api: 'omdb', query: 'lord of the rings', title: 'Best Ever Rated' },
+            pick: { api: 'omdb', query: 'john wick', title: "Today's Top Picks" },
+            anime: { api: 'jikan', url: 'https://api.jikan.moe/v4/top/anime', title: 'Top Anime Series & Movies' },
+            search: { api: 'omdb', query: '', title: 'Search Results' }
+        };
 
-        const searchBox = document.getElementById('search-box');
-        const searchSection = document.getElementById('search-section');
-        const searchGrid = document.getElementById('search-grid');
-        const homeView = document.getElementById('home-view');
-        const heroPicks = document.getElementById('hero-picks');
-        const popularGrid = document.getElementById('popular-grid');
-        const modal = document.getElementById('movie-modal');
-        const modalBody = document.getElementById('modal-body');
-        const closeBtn = document.querySelector('.close-btn');
+        let currentCategory = 'trending';
+        let currentPage = 1;
+        let isFetching = false;
+
+        const DOM = {
+            logo: document.getElementById('site-logo'),
+            searchBox: document.getElementById('search-box'),
+            mainGrid: document.getElementById('main-grid'),
+            gridTitle: document.getElementById('grid-title'),
+            heroContainer: document.getElementById('hero-container'),
+            heroPicks: document.getElementById('hero-picks'),
+            loadingTrigger: document.getElementById('loading-trigger'),
+            modal: document.getElementById('movie-modal'),
+            modalBody: document.getElementById('modal-body')
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             loadHeroPicks();
-            loadPopularMovies();
+            setCategory('trending');
+            setupIntersectionObserver();
         });
 
+        DOM.logo.addEventListener('click', () => {
+            DOM.searchBox.value = '';
+            DOM.heroContainer.classList.remove('hidden');
+            setCategory('trending');
+        });
+
+        document.querySelectorAll('.nav-links li').forEach(item => {
+            item.addEventListener('click', (e) => {
+                DOM.searchBox.value = '';
+                DOM.heroContainer.classList.add('hidden');
+                setCategory(e.target.getAttribute('data-category'));
+            });
+        });
+
+        DOM.searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && DOM.searchBox.value.trim()) {
+                DOM.heroContainer.classList.add('hidden');
+                categories.search.query = DOM.searchBox.value.trim();
+                categories.search.title = `Search Results: ${categories.search.query}`;
+                setCategory('search');
+            }
+        });
+
+        function setCategory(catKey) {
+            currentCategory = catKey;
+            DOM.gridTitle.innerText = categories[catKey].title;
+            DOM.mainGrid.innerHTML = '';
+            currentPage = 1;
+            fetchGridData();
+        }
+
+        // Hero Picks (Manually fetching two guaranteed high-quality OMDB titles)
         async function loadHeroPicks() {
-            const picks = ['Interstellar', 'The Matrix']; 
+            const picks = ['Dune: Part Two', 'Oppenheimer'];
+            DOM.heroPicks.innerHTML = '';
+            
             for (let title of picks) {
-                const res = await fetch(`${BASE_URL}&t=${title}`);
+                const res = await fetch(`https://www.omdbapi.com/?apikey=${OMDB_KEY}&t=${title}`);
                 const data = await res.json();
-                if(data.Response === "True") {
+                
+                if (data.Response === "True") {
                     const card = document.createElement('div');
                     card.className = 'hero-card';
-                    card.onclick = () => openModal(data.imdbID);
+                    card.onclick = () => openOMDBModal(data.imdbID);
                     
-                    const posterSrc = data.Poster !== "N/A" ? data.Poster : "";
-                    
+                    // The Blur Trick: Image twice. Once blurred for BG, once contained for foreground.
                     card.innerHTML = `
-                        ${posterSrc ? `<img src="${posterSrc}" alt="${data.Title}">` : ''}
+                        <img src="${data.Poster}" class="hero-bg" alt="blur-bg">
+                        <img src="${data.Poster}" class="hero-poster" alt="${data.Title}">
                         <div class="hero-info">
                             <h2>${data.Title}</h2>
-                            <p>${data.Year} • ${data.Genre}</p>
+                            <p style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">
+                                ★ ${data.imdbRating}/10 • ${data.Year} • ${data.Genre}
+                            </p>
                         </div>
                     `;
-                    heroPicks.appendChild(card);
+                    DOM.heroPicks.appendChild(card);
                 }
             }
         }
 
-        async function loadPopularMovies() {
-            const res = await fetch(`${BASE_URL}&s=avengers&type=movie`);
-            const data = await res.json();
-            
-            if (data.Response === "True") {
-                renderMovies(data.Search, popularGrid);
-            }
-        }
+        // Fetch Grid Data combining OMDB and Jikan
+        async function fetchGridData() {
+            if (isFetching) return;
+            isFetching = true;
 
-        searchBox.addEventListener('keypress', async (e) => {
-            if (e.key === 'Enter') {
-                const query = searchBox.value.trim();
-                if (query) {
-                    homeView.classList.add('hidden');
-                    searchSection.classList.remove('hidden');
+            const config = categories[currentCategory];
+            
+            try {
+                if (config.api === 'omdb') {
+                    let url = `https://www.omdbapi.com/?apikey=${OMDB_KEY}&s=${config.query}&type=movie&page=${currentPage}`;
+                    if (config.y) url += `&y=${config.y}`;
                     
-                    const res = await fetch(`${BASE_URL}&s=${query}&type=movie`);
+                    const res = await fetch(url);
+                    const data = await res.json();
+
+                    if (data.Response === "True") {
+                        renderOMDBMovies(data.Search);
+                        currentPage++;
+                    } else {
+                        // Endless Loop Trigger: If OMDB runs out of pages, loop back to page 1
+                        currentPage = 1;
+                        if(data.Error !== "Movie not found!") fetchGridData(); 
+                    }
+                } 
+                else if (config.api === 'jikan') {
+                    // Jikan API for Anime
+                    const res = await fetch(`${config.url}?page=${currentPage}`);
                     const data = await res.json();
                     
-                    if (data.Response === "True") {
-                        renderMovies(data.Search, searchGrid);
-                    } else {
-                        searchGrid.innerHTML = `<p>No movies found for "${query}".</p>`;
+                    if (data.data && data.data.length > 0) {
+                        renderAnimeMovies(data.data);
+                        currentPage = data.pagination.has_next_page ? currentPage + 1 : 1;
                     }
-                } else {
-                    homeView.classList.remove('hidden');
-                    searchSection.classList.add('hidden');
                 }
+            } catch (err) {
+                console.error("Fetch Error:", err);
+            } finally {
+                isFetching = false;
             }
-        });
+        }
 
-        function renderMovies(movies, container) {
-            container.innerHTML = '';
-            const limitedMovies = movies.slice(0, 8); 
-            
-            limitedMovies.forEach(movie => {
+        function renderOMDBMovies(movies) {
+            movies.forEach(movie => {
+                if (!movie.Poster || movie.Poster === "N/A") return; // Filter broken images
+
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                card.onclick = () => openModal(movie.imdbID);
-                
-                const posterSrc = movie.Poster !== "N/A" ? movie.Poster : "";
+                card.onclick = () => openOMDBModal(movie.imdbID);
                 
                 card.innerHTML = `
-                    ${posterSrc ? `<img src="${posterSrc}" alt="${movie.Title}">` : '<div style="height:300px; background:#000;"></div>'}
+                    <img src="${movie.Poster}" alt="${movie.Title}" loading="lazy">
                     <h3>${movie.Title}</h3>
                 `;
-                container.appendChild(card);
+                DOM.mainGrid.appendChild(card);
             });
         }
 
-        async function openModal(id) {
-            const res = await fetch(`${BASE_URL}&i=${id}&plot=full`);
+        function renderAnimeMovies(animes) {
+            animes.forEach(anime => {
+                const poster = anime.images.jpg.image_url;
+                if (!poster) return;
+
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                // Pass whole object to modal since Jikan doesn't need a second fetch
+                card.onclick = () => openAnimeModal(anime); 
+                
+                card.innerHTML = `
+                    <img src="${poster}" alt="${anime.title}" loading="lazy">
+                    <h3>${anime.title_english || anime.title}</h3>
+                `;
+                DOM.mainGrid.appendChild(card);
+            });
+        }
+
+        function setupIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) fetchGridData();
+            }, { rootMargin: '200px' });
+            observer.observe(DOM.loadingTrigger);
+        }
+
+        // Modal for OMDB Movies
+        async function openOMDBModal(id) {
+            const res = await fetch(`https://www.omdbapi.com/?apikey=${OMDB_KEY}&i=${id}&plot=full`);
             const movie = await res.json();
             
-            const posterSrc = movie.Poster !== "N/A" ? movie.Poster : "";
-            
-            modalBody.innerHTML = `
-                ${posterSrc ? `<img src="${posterSrc}" class="modal-poster">` : '<div class="modal-poster" style="background:#000;"></div>'}
+            // Zero-API YouTube Trailer Hack
+            const trailerUrl = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(movie.Title + ' official movie trailer')}`;
+
+            DOM.modalBody.innerHTML = `
+                ${movie.Poster !== "N/A" ? `<img src="${movie.Poster}" class="modal-poster">` : ''}
                 <div class="modal-details">
                     <h2>${movie.Title}</h2>
                     <p><strong>Release Date:</strong> ${movie.Released}</p>
@@ -359,18 +331,49 @@
                     <p><strong>Ratings:</strong> ${movie.imdbRating}/10</p>
                     <p><strong>Story Overview:</strong> ${movie.Plot}</p>
                     
-                    <div class="trailer-box">
-                        [Trailer Video Player will go here once TMDB API is connected]
+                    <div class="trailer-container">
+                        <iframe src="${trailerUrl}" allowfullscreen></iframe>
                     </div>
                 </div>
             `;
-            modal.style.display = 'flex';
+            DOM.modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
-        closeBtn.onclick = () => modal.style.display = 'none';
-        window.onclick = (e) => {
-            if (e.target === modal) modal.style.display = 'none';
+        // Modal for Anime (Jikan)
+        function openAnimeModal(anime) {
+            const title = anime.title_english || anime.title;
+            const trailerUrl = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(title + ' anime trailer')}`;
+
+            DOM.modalBody.innerHTML = `
+                <img src="${anime.images.jpg.image_url}" class="modal-poster">
+                <div class="modal-details">
+                    <h2>${title}</h2>
+                    <p><strong>Status:</strong> ${anime.status} (${anime.year || 'N/A'})</p>
+                    <p><strong>Studio:</strong> ${anime.studios.map(s => s.name).join(', ') || 'N/A'}</p>
+                    <p><strong>Episodes:</strong> ${anime.episodes || 'Unknown'}</p>
+                    <p><strong>Genres:</strong> ${anime.genres.map(g => g.name).join(', ')}</p>
+                    <p><strong>Score:</strong> ${anime.score || 'N/A'}/10</p>
+                    <p><strong>Synopsis:</strong> ${anime.synopsis || 'No synopsis available.'}</p>
+                    
+                    <div class="trailer-container">
+                        <iframe src="${anime.trailer.embed_url || trailerUrl}" allowfullscreen></iframe>
+                    </div>
+                </div>
+            `;
+            DOM.modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
+
+        // Close Modal Logic
+        const closeAndStopVideo = () => {
+            DOM.modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            DOM.modalBody.innerHTML = ''; // Destroys iframe to stop audio
+        };
+
+        document.getElementById('close-modal').onclick = closeAndStopVideo;
+        window.onclick = (e) => { if (e.target === DOM.modal) closeAndStopVideo(); }
     </script>
 </body>
 </html>
