@@ -52,23 +52,23 @@
         .hero-poster { height: 95%; width: auto; max-width: 100%; object-fit: contain; z-index: 2; box-shadow: 0 0 20px rgba(0,0,0,0.8); border-radius: 8px; }
         .hero-info { position: absolute; bottom: 0; left: 0; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.95)); width: 100%; z-index: 3; text-align: center; }
 
+        /* Grids */
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
         .movie-grid.pick-layout, .tracker-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto 2rem; }
 
-        /* HORIZONTAL SCROLL FIX: Added min-width: 0 and max-width: 100% to strictly contain the cards */
         .movie-card { 
             background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center; padding-bottom: 10px; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid transparent;
             min-width: 0; max-width: 100%;
         }
         .movie-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 15px rgba(0,0,0,0.6); }
         .movie-card img { width: 100%; height: 280px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #000; }
-        .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+        .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
 
         .rank-badge { position: absolute; top: -10px; left: -10px; background: var(--accent-color); color: var(--primary-bg); font-weight: bold; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; z-index: 5; font-size: 1.1rem; border: 2px solid var(--primary-bg); box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
         .loading-trigger { height: 60px; display: flex; justify-content: center; align-items: center; color: var(--accent-color); font-weight: bold; margin-top: 2rem; }
 
-        /* ================= TRACKER UI SPECIFICS ================= */
-        .tracker-section { margin-bottom: 3rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 10px; max-width: 100%; overflow-x: hidden; }
+        /* TRACKER UI */
+        .tracker-section { margin-bottom: 3rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 10px; overflow-x: hidden;}
         .tracker-section h2 { border-bottom: 2px solid; padding-bottom: 10px; margin-bottom: 20px;}
         #sec-watching h2 { color: var(--watching-color); border-color: var(--watching-color); }
         #sec-planned h2 { color: var(--planned-color); border-color: var(--planned-color); }
@@ -77,7 +77,6 @@
         .remove-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: #ff4d4d; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; cursor: pointer; z-index: 10; transition: 0.2s;}
         .remove-btn:hover { background: #ff4d4d; color: white; transform: scale(1.1); }
 
-        /* EPISODE COUNTER OVERFLOW FIX: Added flex-wrap */
         .ep-controls { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 10px; padding: 0 5px; }
         .ep-btn { background: var(--primary-bg); color: var(--text-light); border: 1px solid var(--accent-color); border-radius: 4px; width: 30px; height: 30px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; transition: 0.2s;}
         .ep-btn:hover { background: var(--accent-color); color: var(--primary-bg); }
@@ -85,7 +84,6 @@
         .ep-input { width: 45px; height: 30px; text-align: center; background: var(--primary-bg); color: var(--text-light); border: 1px solid var(--text-muted); border-radius: 4px; outline: none; font-weight: bold;}
         .ep-input::-webkit-outer-spin-button, .ep-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .ep-input[type=number] { -moz-appearance: textfield; }
-
         .ep-total { color: var(--text-muted); font-size: 0.9rem; margin-left: 5px;}
         .tracker-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 2rem; }
 
@@ -94,7 +92,8 @@
         .modal-content { background-color: var(--primary-bg); border-radius: 10px; width: 95%; max-width: 1000px; max-height: 90vh; position: relative; border: 1px solid var(--accent-color); display: flex; flex-direction: column; overflow: hidden; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: var(--accent-color); cursor: pointer; z-index: 100; transition: transform 0.2s; background: var(--primary-bg); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
         .close-btn:hover { transform: scale(1.2); }
-        .modal-body { display: flex; gap: 2rem; flex-wrap: wrap; padding: 2.5rem 2rem 2rem; overflow-y: auto; max-height: 90vh; flex-direction: row; }
+        
+        .modal-body { display: flex; gap: 2rem; padding: 2.5rem 2rem 2rem; overflow-y: auto; overflow-x: hidden; max-height: 90vh; flex-direction: row; width: 100%; }
         
         .modal-poster-col { display: flex; flex-direction: column; gap: 10px; width: 300px; }
         .modal-poster { width: 100%; height: auto; max-height: 450px; object-fit: contain; border-radius: 8px; }
@@ -109,18 +108,19 @@
         .btn-planned { background-color: var(--planned-color); }
         .btn-completed { background-color: var(--completed-color); }
 
-        .modal-details { flex: 1; min-width: 250px; }
-        .modal-details h2 { color: var(--accent-color); margin-bottom: 10px; font-size: 2rem; padding-right: 40px; }
-        .modal-details p { margin-bottom: 8px; line-height: 1.6; color: var(--text-light); }
+        .modal-details { flex: 1; min-width: 0; }
+        .modal-details h2 { color: var(--accent-color); margin-bottom: 10px; font-size: 2rem; padding-right: 40px; word-wrap: break-word;}
+        .modal-details p { margin-bottom: 8px; line-height: 1.6; color: var(--text-light); word-wrap: break-word;}
         .read-more-btn { color: var(--accent-color); cursor: pointer; font-weight: bold; margin-left: 5px; }
         .read-more-btn:hover { text-decoration: underline; }
-        .trailer-container { margin-top: 20px; width: 100%; aspect-ratio: 16 / 9; }
+        .trailer-container { margin-top: 20px; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; }
         .trailer-container iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
 
         @media (max-width: 1000px) { 
             .movie-grid.pick-layout, .tracker-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } 
         }
         
+        /* 📱 BULLETPROOF MOBILE MODAL AND LAYOUT */
         @media (max-width: 768px) {
             .navbar { flex-direction: row; justify-content: space-between; align-items: center; padding: 1rem; }
             .menu-toggle { display: block; }
@@ -130,16 +130,23 @@
             .nav-links li { width: 100%; text-align: center; padding: 15px 0; }
             .hero-picks { flex-direction: column; height: auto; }
             .hero-card { height: 350px; }
-            
-            /* MOBILE GRID FIX: Bound tracker-grid to the same rules */
-            .movie-grid, .tracker-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
             .movie-card img { height: 220px; }
             
-            .modal-content { max-width: 95vw; }
-            .modal-body { flex-direction: column !important; align-items: center; text-align: center; padding: 4rem 1rem 1rem !important; }
-            .modal-poster-col { width: 100%; max-width: 250px; }
-            .modal-details { width: 100%; min-width: 0; }
-            .modal-details h2 { padding-right: 0; font-size: 1.6rem; }
+            .modal-content { max-width: 95vw; width: 95%; max-height: 85vh; padding: 0; }
+            .modal-body { 
+                flex-direction: column !important; /* Stack vertically */
+                align-items: center; 
+                text-align: center; 
+                padding: 3.5rem 1rem 1.5rem !important; 
+                width: 100%; 
+                overflow-x: hidden; 
+                gap: 1rem; 
+            }
+            .modal-poster-col { width: 100%; max-width: 220px; margin: 0 auto; }
+            .modal-details { width: 100%; min-width: 0; padding: 0; }
+            .modal-details h2 { padding-right: 0; font-size: 1.5rem; }
+            .trailer-container { width: 100%; margin-top: 15px; }
         }
     </style>
 </head>
@@ -204,6 +211,7 @@
 
         function saveDatabase() { localStorage.setItem('otakuTracker', JSON.stringify(otakuDatabase)); }
 
+        // Banned List Array
         function isBanned(anime) {
             const title = (anime.title_english || anime.title || '').toLowerCase();
             return title.includes('steel ball run');
@@ -510,6 +518,7 @@
             loadMyListDashboard();
         }
 
+        // ================= BUTTON LOGIC (RESET & CONSTRAINTS) =================
         function updateListStatus(status) {
             const anime = currentActiveAnime;
             if(!anime) return;
@@ -525,6 +534,14 @@
                 return; 
             }
 
+            const prevData = otakuDatabase[anime.mal_id];
+            let newProgress = prevData?.progress || 1;
+
+            // NEW FEATURE: Reset counter to 1 if moving from Completed to Watching
+            if (prevData?.status === 'completed' && status === 'watching') {
+                newProgress = 1;
+            }
+
             otakuDatabase[anime.mal_id] = {
                 id: anime.mal_id,
                 title: anime.title_english || anime.title,
@@ -533,7 +550,7 @@
                 type: anime.type,
                 airingStatus: anime.status, 
                 status: status,
-                progress: otakuDatabase[anime.mal_id]?.progress || 1
+                progress: newProgress
             };
             
             if(status === 'completed' && anime.episodes) otakuDatabase[anime.mal_id].progress = anime.episodes;
