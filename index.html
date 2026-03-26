@@ -11,6 +11,9 @@
             --accent-color: #21E6C1;
             --text-light: #E8F9FD;
             --text-muted: #7FA9B5;
+            --completed-color: #4CAF50;
+            --watching-color: #FF9800;
+            --planned-color: #2196F3;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
@@ -23,57 +26,32 @@
             z-index: 1000; flex-wrap: wrap; gap: 1rem;
         }
 
-        .logo { 
-            font-size: clamp(1.4rem, 4vw, 2rem); 
-            font-weight: bold; color: var(--accent-color); 
-            cursor: pointer; transition: all 0.3s ease; 
-        }
+        .logo { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: bold; color: var(--accent-color); cursor: pointer; transition: all 0.3s ease; }
         .logo:hover { transform: scale(1.05); text-shadow: 0 0 15px var(--accent-color); }
 
-        .menu-toggle {
-            display: none; font-size: 2rem; color: var(--accent-color);
-            cursor: pointer; padding: 0 10px; font-weight: bold;
-        }
+        .menu-toggle { display: none; font-size: 2rem; color: var(--accent-color); cursor: pointer; padding: 0 10px; font-weight: bold; }
 
         .nav-links { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
         .nav-links li { cursor: pointer; font-weight: 500; transition: all 0.3s ease; padding: 5px 0; position: relative; }
         .nav-links li:hover { color: var(--accent-color); transform: translateY(-2px); }
         .nav-links li.active { color: var(--accent-color); text-shadow: 0 0 8px rgba(33, 230, 193, 0.6); }
-        .nav-links li.active::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; 
-            height: 2px; background-color: var(--accent-color); box-shadow: 0 0 8px var(--accent-color);
-        }
+        .nav-links li.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--accent-color); box-shadow: 0 0 8px var(--accent-color); }
 
         .search-container { position: relative; flex-grow: 1; max-width: 400px; }
-        #search-box {
-            padding: 0.6rem 1rem; width: 100%; border-radius: 20px; border: 1px solid var(--accent-color);
-            background-color: var(--secondary-bg); color: var(--text-light); outline: none; transition: box-shadow 0.3s ease;
-        }
+        #search-box { padding: 0.6rem 1rem; width: 100%; border-radius: 20px; border: 1px solid var(--accent-color); background-color: var(--secondary-bg); color: var(--text-light); outline: none; transition: box-shadow 0.3s ease; }
         #search-box:focus { box-shadow: 0 0 10px rgba(33, 230, 193, 0.5); }
 
-        .suggestions-box {
-            position: absolute; top: 110%; left: 0; width: 100%; background-color: var(--primary-bg);
-            border: 1px solid var(--accent-color); border-radius: 10px; overflow: hidden;
-            z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
-        }
-        .suggestion-item {
-            display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer;
-            border-bottom: 1px solid var(--secondary-bg); transition: background 0.2s;
-        }
+        .suggestions-box { position: absolute; top: 110%; left: 0; width: 100%; background-color: var(--primary-bg); border: 1px solid var(--accent-color); border-radius: 10px; overflow: hidden; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        .suggestion-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid var(--secondary-bg); transition: background 0.2s; }
         .suggestion-item:hover { background-color: var(--secondary-bg); }
         .suggestion-item img { width: 40px; height: 50px; object-fit: cover; border-radius: 4px; }
-        .suggestion-item div { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .main-content { padding: 2rem; }
         .section-title { margin-bottom: 1.5rem; color: var(--accent-color); border-left: 4px solid var(--accent-color); padding-left: 10px; text-transform: capitalize; }
         .hidden { display: none !important; }
 
         .hero-picks { display: flex; gap: 2rem; height: 45vh; margin-bottom: 3rem; }
-        .hero-card {
-            flex: 1; border-radius: 10px; overflow: hidden; position: relative;
-            cursor: pointer; transition: transform 0.3s; border: 1px solid var(--secondary-bg);
-            display: flex; justify-content: center; align-items: center; background-color: #000;
-        }
+        .hero-card { flex: 1; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; transition: transform 0.3s; border: 1px solid var(--secondary-bg); display: flex; justify-content: center; align-items: center; background-color: #000; }
         .hero-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .hero-bg { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; object-fit: cover; filter: blur(25px) opacity(0.4); z-index: 1; }
         .hero-poster { height: 95%; width: auto; max-width: 100%; object-fit: contain; z-index: 2; box-shadow: 0 0 20px rgba(0,0,0,0.8); border-radius: 8px; }
@@ -82,89 +60,85 @@
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
         .movie-grid.pick-layout { grid-template-columns: repeat(5, 1fr); max-width: 1200px; margin: 0 auto; }
 
-        .movie-card {
-            background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer;
-            transition: all 0.3s ease; text-align: center; padding-bottom: 10px;
-            position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+        .movie-card { background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center; padding-bottom: 10px; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         .movie-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 15px rgba(0,0,0,0.6); }
         .movie-card img { width: 100%; height: 280px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #000; }
         .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .rank-badge {
-            position: absolute; top: -10px; left: -10px; background: var(--accent-color);
-            color: var(--primary-bg); font-weight: bold; width: 35px; height: 35px;
-            display: flex; justify-content: center; align-items: center; border-radius: 50%;
-            z-index: 5; font-size: 1.1rem; border: 2px solid var(--primary-bg); box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-        }
-
+        .rank-badge { position: absolute; top: -10px; left: -10px; background: var(--accent-color); color: var(--primary-bg); font-weight: bold; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; z-index: 5; font-size: 1.1rem; border: 2px solid var(--primary-bg); box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
         .loading-trigger { height: 60px; display: flex; justify-content: center; align-items: center; color: var(--accent-color); font-weight: bold; margin-top: 2rem; }
 
-        /* MODAL STYLING */
-        .modal { 
-            display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; 
-            background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; 
-        }
-        .modal-content { 
-            background-color: var(--primary-bg); border-radius: 10px; width: 95%; max-width: 1000px; 
-            max-height: 90vh; position: relative; border: 1px solid var(--accent-color);
-            display: flex; flex-direction: column; overflow: hidden; 
-        }
-        .close-btn { 
-            position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: var(--accent-color); 
-            cursor: pointer; z-index: 100; transition: transform 0.2s; background: var(--primary-bg);
-            border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-        }
+        /* ================= MY LIST 3-COLUMN DASHBOARD ================= */
+        .my-list-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .list-column { background-color: var(--secondary-bg); border-radius: 10px; padding: 1.5rem; border-top: 4px solid var(--accent-color); min-height: 50vh;}
+        .list-column.watching { border-color: var(--watching-color); }
+        .list-column.planned { border-color: var(--planned-color); }
+        .list-column.completed { border-color: var(--completed-color); }
+        .list-column h2 { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        
+        .list-item-card { display: flex; gap: 15px; background: var(--primary-bg); padding: 10px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.4); align-items: center; position: relative;}
+        .list-item-card img { width: 60px; height: 85px; object-fit: cover; border-radius: 5px; cursor: pointer; }
+        .list-item-info { flex: 1; display: flex; flex-direction: column; justify-content: center;}
+        .list-item-title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;}
+        
+        /* Episode Controls */
+        .ep-controls { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+        .ep-btn { background: var(--secondary-bg); color: var(--text-light); border: 1px solid var(--accent-color); border-radius: 4px; width: 25px; height: 25px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; }
+        .ep-btn:hover { background: var(--accent-color); color: var(--primary-bg); }
+        .ep-input { width: 45px; height: 25px; text-align: center; background: var(--primary-bg); color: var(--text-light); border: 1px solid var(--text-muted); border-radius: 4px; outline: none; }
+        .ep-total { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .remove-btn { position: absolute; top: 10px; right: 10px; color: #ff4d4d; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+
+        /* ================= MODAL & BUTTONS ================= */
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+        .modal-content { background-color: var(--primary-bg); border-radius: 10px; width: 95%; max-width: 1000px; max-height: 90vh; position: relative; border: 1px solid var(--accent-color); display: flex; flex-direction: column; overflow: hidden; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: var(--accent-color); cursor: pointer; z-index: 100; transition: transform 0.2s; background: var(--primary-bg); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
         .close-btn:hover { transform: scale(1.2); }
+        .modal-body { display: flex; gap: 2rem; flex-wrap: wrap; padding: 2.5rem 2rem 2rem; overflow-y: auto; max-height: 90vh; flex-direction: row; }
         
-        .modal-body { 
-            display: flex; gap: 2rem; flex-wrap: wrap; padding: 2.5rem 2rem 2rem; 
-            overflow-y: auto; max-height: 90vh; flex-direction: row;
-        }
+        .modal-poster-col { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 300px; }
+        .modal-poster { width: 100%; height: auto; max-height: 450px; object-fit: contain; border-radius: 8px; }
         
-        .modal-poster { width: 300px; height: auto; max-height: 450px; object-fit: contain; border-radius: 8px; }
+        /* Modal Action Buttons */
+        .action-buttons { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .action-btn { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: all 0.2s; color: white; opacity: 0.7; }
+        .action-btn:hover:not(:disabled) { opacity: 1; transform: scale(1.02); }
+        .action-btn.active { opacity: 1; border: 2px solid white; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .action-btn:disabled { background: #333 !important; color: #777; cursor: not-allowed; opacity: 0.5; }
+        
+        .btn-watching { background-color: var(--watching-color); }
+        .btn-planned { background-color: var(--planned-color); }
+        .btn-completed { background-color: var(--completed-color); }
+
         .modal-details { flex: 1; min-width: 250px; }
         .modal-details h2 { color: var(--accent-color); margin-bottom: 10px; font-size: 2rem; padding-right: 40px; }
         .modal-details p { margin-bottom: 8px; line-height: 1.6; color: var(--text-light); }
-        
         .read-more-btn { color: var(--accent-color); cursor: pointer; font-weight: bold; margin-left: 5px; }
         .read-more-btn:hover { text-decoration: underline; }
-
         .trailer-container { margin-top: 20px; width: 100%; aspect-ratio: 16 / 9; }
         .trailer-container iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
 
-        @media (max-width: 900px) { .movie-grid.pick-layout { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } }
+        @media (max-width: 900px) { 
+            .movie-grid.pick-layout { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } 
+            .my-list-dashboard { grid-template-columns: 1fr; } /* Stack columns on tablets/phones */
+        }
         
-        /* 📱 BULLETPROOF MOBILE VIEWPORT FIXES */
         @media (max-width: 768px) {
             .navbar { flex-direction: row; justify-content: space-between; align-items: center; }
             .menu-toggle { display: block; }
             .search-container { order: 3; width: 100%; max-width: 100%; margin-top: 10px; }
-            
-            .nav-links { 
-                display: none; flex-direction: column; width: 100%; order: 4; 
-                background: var(--primary-bg); position: absolute; top: 100%; left: 0; 
-                padding: 1rem 0; border-bottom: 2px solid var(--accent-color); z-index: 1001;
-            }
+            .nav-links { display: none; flex-direction: column; width: 100%; order: 4; background: var(--primary-bg); position: absolute; top: 100%; left: 0; padding: 1rem 0; border-bottom: 2px solid var(--accent-color); z-index: 1001; }
             .nav-links.show-nav { display: flex; }
             .nav-links li { width: 100%; text-align: center; padding: 15px 0; }
-            
             .hero-picks { flex-direction: column; height: auto; }
             .hero-card { height: 350px; }
             
-            /* The Layout Fix for the Modal on Mobile */
             .modal-content { max-width: 95vw; width: 95%; max-height: 85vh; }
-            .modal-body { 
-                flex-direction: column !important; /* Force items to stack vertically */
-                flex-wrap: nowrap !important;
-                align-items: center; 
-                text-align: center; 
-                padding: 3.5rem 1rem 1.5rem !important; 
-            }
-            .modal-poster { width: 60% !important; max-width: 200px !important; margin-bottom: 10px; }
+            .modal-body { flex-direction: column !important; flex-wrap: nowrap !important; align-items: center; text-align: center; padding: 3.5rem 1rem 1.5rem !important; }
+            .modal-poster-col { width: 80% !important; max-width: 250px !important; margin-bottom: 10px; }
             .modal-details { width: 100% !important; min-width: 0 !important; flex: none !important; }
             .modal-details h2 { padding-right: 0 !important; font-size: 1.5rem; }
-            
             .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
             .movie-card img { height: 220px; }
         }
@@ -174,18 +148,18 @@
 
     <nav class="navbar">
         <div class="logo" id="site-logo">Otaku Critique</div>
-        
         <div class="menu-toggle" id="mobile-menu-btn">⋮</div>
         
         <ul class="nav-links" id="nav-list">
             <li data-category="home" class="active">Home</li>
             <li data-category="upcoming">Upcoming</li>
-            <li data-category="underrated">Underrated</li>
+            <li data-category="movies">Anime Movies</li>
             <li data-category="best">Best Ever</li>
             <li data-category="pick">Today's Pick</li>
+            <li data-category="mylist" style="color: #FF9800; font-weight: bold;">My List</li>
         </ul>
         <div class="search-container">
-            <input type="text" id="search-box" placeholder="Search Anime... (e.g. Naruto, Bleach)" autocomplete="off">
+            <input type="text" id="search-box" placeholder="Search Anime... (e.g. Naruto)" autocomplete="off">
             <div id="search-suggestions" class="suggestions-box hidden"></div>
         </div>
     </nav>
@@ -197,7 +171,24 @@
 
         <section class="dynamic-movies">
             <h2 class="section-title" id="grid-title">Loading...</h2>
+            
             <div class="movie-grid" id="main-grid"></div>
+            
+            <div class="my-list-dashboard hidden" id="my-list-grid">
+                <div class="list-column watching">
+                    <h2 style="color: var(--watching-color);">Watching</h2>
+                    <div id="list-watching"></div>
+                </div>
+                <div class="list-column planned">
+                    <h2 style="color: var(--planned-color);">Going to Watch</h2>
+                    <div id="list-planned"></div>
+                </div>
+                <div class="list-column completed">
+                    <h2 style="color: var(--completed-color);">Completed</h2>
+                    <div id="list-completed"></div>
+                </div>
+            </div>
+
             <div class="loading-trigger hidden" id="loading-trigger">Scrolling for more...</div>
         </section>
     </main>
@@ -212,6 +203,14 @@
     <script>
         const API_BASE = 'https://api.jikan.moe/v4';
 
+        // ================= DATABASE (Local Storage) =================
+        let otakuDatabase = JSON.parse(localStorage.getItem('otakuTracker')) || {};
+        let currentActiveAnime = null; // Stores data of the anime currently open in modal
+
+        function saveDatabase() {
+            localStorage.setItem('otakuTracker', JSON.stringify(otakuDatabase));
+        }
+
         const DOM = {
             logo: document.getElementById('site-logo'),
             mobileBtn: document.getElementById('mobile-menu-btn'),
@@ -219,6 +218,7 @@
             searchBox: document.getElementById('search-box'),
             suggestions: document.getElementById('search-suggestions'),
             mainGrid: document.getElementById('main-grid'),
+            myListGrid: document.getElementById('my-list-grid'),
             gridTitle: document.getElementById('grid-title'),
             heroContainer: document.getElementById('hero-container'),
             heroPicks: document.getElementById('hero-picks'),
@@ -240,9 +240,7 @@
             setupIntersectionObserver();
         });
 
-        DOM.mobileBtn.addEventListener('click', () => {
-            DOM.navList.classList.toggle('show-nav');
-        });
+        DOM.mobileBtn.addEventListener('click', () => DOM.navList.classList.toggle('show-nav'));
 
         function setActiveTab(category) {
             DOM.navItems.forEach(item => {
@@ -262,10 +260,16 @@
         DOM.navItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 resetSearch();
-                DOM.heroContainer.classList.add('hidden');
                 const cat = e.target.getAttribute('data-category');
                 setActiveTab(cat);
-                loadCategory(cat, true);
+                
+                if (cat === 'mylist') {
+                    DOM.heroContainer.classList.add('hidden');
+                    loadMyListDashboard();
+                } else {
+                    DOM.heroContainer.classList.add('hidden');
+                    loadCategory(cat, true);
+                }
                 DOM.navList.classList.remove('show-nav'); 
             });
         });
@@ -284,10 +288,7 @@
                         data.data.forEach(anime => {
                             const item = document.createElement('div');
                             item.className = 'suggestion-item';
-                            item.innerHTML = `
-                                <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
-                                <div><strong>${anime.title_english || anime.title}</strong><br><small>★ ${anime.score || 'N/A'}</small></div>
-                            `;
+                            item.innerHTML = `<img src="${anime.images.jpg.image_url}"><div><strong>${anime.title_english || anime.title}</strong><br><small>★ ${anime.score || 'N/A'}</small></div>`;
                             item.onclick = () => { DOM.suggestions.classList.add('hidden'); openModal(anime); };
                             DOM.suggestions.appendChild(item);
                         });
@@ -302,6 +303,8 @@
                 resetSearch();
                 DOM.heroContainer.classList.add('hidden');
                 setActiveTab('');
+                DOM.mainGrid.classList.remove('hidden');
+                DOM.myListGrid.classList.add('hidden');
                 const query = DOM.searchBox.value.trim();
                 DOM.gridTitle.innerText = `Search Results: ${query}`;
                 currentCategory = 'search';
@@ -334,15 +337,7 @@
                     const card = document.createElement('div');
                     card.className = 'hero-card';
                     card.onclick = () => openModal(anime);
-                    const poster = anime.images.jpg.large_image_url;
-                    card.innerHTML = `
-                        <img src="${poster}" class="hero-bg" alt="blur-bg">
-                        <img src="${poster}" class="hero-poster" alt="${anime.title}">
-                        <div class="hero-info">
-                            <h2>${anime.title_english || anime.title}</h2>
-                            <p style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">★ ${anime.score || 'N/A'}/10</p>
-                        </div>
-                    `;
+                    card.innerHTML = `<img src="${anime.images.jpg.large_image_url}" class="hero-bg"><img src="${anime.images.jpg.large_image_url}" class="hero-poster"><div class="hero-info"><h2>${anime.title_english || anime.title}</h2><p style="color: var(--accent-color); font-weight: bold; margin-top: 5px;">★ ${anime.score || 'N/A'}/10</p></div>`;
                     DOM.heroPicks.appendChild(card);
                 });
             } catch(e) {}
@@ -351,6 +346,9 @@
         async function loadCategory(catKey, isNewCategory = false) {
             if(isFetching) return;
             isFetching = true;
+
+            DOM.mainGrid.classList.remove('hidden');
+            DOM.myListGrid.classList.add('hidden');
 
             if (isNewCategory) {
                 currentCategory = catKey;
@@ -370,23 +368,16 @@
             try {
                 if (catKey === 'home') {
                     DOM.gridTitle.innerText = "Masterpieces & Hidden Gems";
-                    const [mastRes, gemRes] = await Promise.all([
-                        fetch(`${API_BASE}/top/anime?page=${currentPage}`),
-                        fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`)
-                    ]);
-                    const mastData = await mastRes.json();
-                    const gemData = await gemRes.json();
-
+                    const [mastRes, gemRes] = await Promise.all([ fetch(`${API_BASE}/top/anime?page=${currentPage}`), fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`) ]);
+                    const mastData = await mastRes.json(); const gemData = await gemRes.json();
                     const maxLength = Math.max(mastData.data.length, gemData.data.length);
-                    for(let i = 0; i < maxLength; i++) {
-                        if(mastData.data[i]) animes.push(mastData.data[i]);
-                        if(gemData.data[i]) animes.push(gemData.data[i]);
-                    }
+                    for(let i=0; i<maxLength; i++) { if(mastData.data[i]) animes.push(mastData.data[i]); if(gemData.data[i]) animes.push(gemData.data[i]); }
                     if (!mastData.pagination.has_next_page) infiniteScrollEnabled = false;
                 } 
-                else if (catKey === 'underrated') {
-                    DOM.gridTitle.innerText = "Hidden Gems & Underrated Masterpieces";
-                    const res = await fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`);
+                else if (catKey === 'movies') {
+                    // 1. REPLACED UNDERRATED WITH ANIME MOVIES
+                    DOM.gridTitle.innerText = "Top Rated Anime Movies";
+                    const res = await fetch(`${API_BASE}/anime?type=movie&order_by=popularity&sort=desc&page=${currentPage}`);
                     const data = await res.json();
                     animes = data.data;
                     if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
@@ -410,25 +401,19 @@
                     const res = await fetch(`${API_BASE}/top/anime?filter=favorite&limit=25`);
                     const data = await res.json();
                     let validAnimes = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
-                    const dayOfMonth = new Date().getDate(); 
-                    const startIdx = dayOfMonth % validAnimes.length; 
+                    const startIdx = new Date().getDate() % validAnimes.length; 
                     animes = validAnimes.concat(validAnimes).slice(startIdx, startIdx + 10);
                     isRankedPick = true;
                 }
 
-                if (catKey !== 'pick') {
-                    animes = animes.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
-                }
-
+                if (catKey !== 'pick') animes = animes.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
                 renderGrid(animes, isRankedPick, isNewCategory);
                 if (!infiniteScrollEnabled) DOM.loadingTrigger.classList.add('hidden');
 
             } catch (error) { console.error(error);
             } finally {
                 isFetching = false;
-                if (infiniteScrollEnabled && isTriggerVisible()) {
-                    setTimeout(() => { currentPage++; loadCategory(currentCategory, false); }, 500); 
-                }
+                if (infiniteScrollEnabled && isTriggerVisible()) { setTimeout(() => { currentPage++; loadCategory(currentCategory, false); }, 500); }
             }
         }
 
@@ -438,25 +423,13 @@
         }
 
         function renderGrid(animes, isRankedPick, isNewCategory) {
-            if (isNewCategory && animes.length === 0) {
-                DOM.mainGrid.innerHTML = '<p>No results found.</p>';
-                return;
-            }
-
+            if (isNewCategory && animes.length === 0) { DOM.mainGrid.innerHTML = '<p>No results found.</p>'; return; }
             animes.forEach((anime, index) => {
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 card.onclick = () => openModal(anime); 
-                
-                const poster = anime.images.jpg.large_image_url;
-                const title = anime.title_english || anime.title;
                 let badgeHTML = isRankedPick ? `<div class="rank-badge">${index + 1}</div>` : '';
-
-                card.innerHTML = `
-                    ${badgeHTML}
-                    <img src="${poster}" alt="${title}" loading="lazy">
-                    <h3>${title}</h3>
-                `;
+                card.innerHTML = `${badgeHTML}<img src="${anime.images.jpg.large_image_url}" loading="lazy"><h3>${anime.title_english || anime.title}</h3>`;
                 DOM.mainGrid.appendChild(card);
             });
         }
@@ -464,8 +437,7 @@
         function setupIntersectionObserver() {
             const observer = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && infiniteScrollEnabled && !isFetching) {
-                    currentPage++;
-                    loadCategory(currentCategory, false);
+                    currentPage++; loadCategory(currentCategory, false);
                 }
             }, { rootMargin: '300px' }); 
             observer.observe(DOM.loadingTrigger);
@@ -473,39 +445,77 @@
 
         window.toggleSynopsis = function(btn) {
             const contentSpan = btn.previousElementSibling;
-            const fullText = contentSpan.getAttribute('data-full');
-            if (btn.innerText === 'Read More') {
-                contentSpan.innerText = fullText;
-                btn.innerText = ' Show Less';
-            } else {
-                contentSpan.innerText = fullText.substring(0, 200) + '...';
-                btn.innerText = ' Read More';
-            }
+            if (btn.innerText === 'Read More') { contentSpan.innerText = contentSpan.getAttribute('data-full'); btn.innerText = ' Show Less'; } 
+            else { contentSpan.innerText = contentSpan.getAttribute('data-full').substring(0, 200) + '...'; btn.innerText = ' Read More'; }
         };
 
-        function openModal(anime) {
-            const title = anime.title_english || anime.title;
-            const genres = anime.genres ? anime.genres.map(g => g.name).join(', ') : 'N/A';
-            const studios = anime.studios ? anime.studios.map(s => s.name).join(', ') : 'N/A';
+        // ================= TRACKER LOGIC =================
+        
+        function updateListStatus(status) {
+            const anime = currentActiveAnime;
+            if(!anime) return;
             
-            const fullSynopsis = anime.synopsis || 'No synopsis available.';
-            let shortSynopsis = fullSynopsis;
-            let readMoreHTML = '';
-            
-            if (fullSynopsis.length > 200) {
-                shortSynopsis = fullSynopsis.substring(0, 200) + '...';
-                readMoreHTML = `<span class="read-more-btn" onclick="toggleSynopsis(this)">Read More</span>`;
+            // Validation: Cannot add Upcoming to Watching/Completed
+            if ((anime.status === 'Not yet aired' || anime.status === 'Upcoming') && (status === 'watching' || status === 'completed')) {
+                alert("This anime hasn't aired yet! You can only add it to 'Going to Watch'.");
+                return;
             }
 
-            // Replacing quotes to prevent HTML breaking inside data attributes
-            const safeSynopsis = fullSynopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            otakuDatabase[anime.mal_id] = {
+                id: anime.mal_id,
+                title: anime.title_english || anime.title,
+                poster: anime.images.jpg.large_image_url,
+                totalEpisodes: anime.episodes,
+                status: status,
+                progress: otakuDatabase[anime.mal_id]?.progress || 0
+            };
+            
+            // If marked complete, auto-max the episodes
+            if(status === 'completed' && anime.episodes) otakuDatabase[anime.mal_id].progress = anime.episodes;
+
+            saveDatabase();
+            refreshModalButtons(anime.mal_id);
+            
+            // If they are currently looking at the list, update it live
+            if(currentCategory === 'mylist') loadMyListDashboard();
+        }
+
+        function refreshModalButtons(id) {
+            const dbData = otakuDatabase[id];
+            document.getElementById('btn-watching').className = `action-btn btn-watching ${dbData?.status === 'watching' ? 'active' : ''}`;
+            document.getElementById('btn-planned').className = `action-btn btn-planned ${dbData?.status === 'planned' ? 'active' : ''}`;
+            document.getElementById('btn-completed').className = `action-btn btn-completed ${dbData?.status === 'completed' ? 'active' : ''}`;
+        }
+
+        // ================= OPEN MODAL (With 3 Buttons) =================
+        function openModal(anime) {
+            currentActiveAnime = anime;
+            const title = anime.title_english || anime.title;
+            const genres = anime.genres ? anime.genres.map(g => g.name).join(', ') : 'N/A';
+            const isUpcoming = (anime.status === 'Not yet aired' || anime.status === 'Upcoming');
+            
+            let shortSynopsis = anime.synopsis || 'No synopsis available.';
+            let readMoreHTML = '';
+            if (shortSynopsis.length > 200) {
+                shortSynopsis = shortSynopsis.substring(0, 200) + '...';
+                readMoreHTML = `<span class="read-more-btn" onclick="toggleSynopsis(this)">Read More</span>`;
+            }
+            const safeSynopsis = (anime.synopsis || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
             DOM.modalBody.innerHTML = `
-                <img src="${anime.images.jpg.large_image_url}" class="modal-poster">
+                <div class="modal-poster-col">
+                    <img src="${anime.images.jpg.large_image_url}" class="modal-poster">
+                    
+                    <div class="action-buttons">
+                        <button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${isUpcoming ? 'disabled title="Not aired yet"' : ''}>✔ Completed</button>
+                        <button id="btn-watching" class="action-btn btn-watching" onclick="updateListStatus('watching')" ${isUpcoming ? 'disabled title="Not aired yet"' : ''}>▶ Watching</button>
+                        <button id="btn-planned" class="action-btn btn-planned" onclick="updateListStatus('planned')">🗓 Going to Watch</button>
+                    </div>
+                </div>
+
                 <div class="modal-details">
                     <h2>${title}</h2>
                     <p><strong>Status:</strong> ${anime.status} (${anime.year || 'N/A'})</p>
-                    <p><strong>Studio:</strong> ${studios}</p>
                     <p><strong>Episodes:</strong> ${anime.episodes || 'Unknown'}</p>
                     <p><strong>Genres:</strong> ${genres}</p>
                     <p><strong>Score:</strong> ${anime.score || 'N/A'}/10</p>
@@ -513,22 +523,121 @@
                         <span class="synopsis-content" data-full="${safeSynopsis}">${shortSynopsis}</span>
                         ${readMoreHTML}
                     </p>
-                    ${anime.trailer.embed_url ? `
-                    <div class="trailer-container">
-                        <iframe src="${anime.trailer.embed_url}" allowfullscreen></iframe>
-                    </div>` : ''}
+                    ${anime.trailer.embed_url ? `<div class="trailer-container"><iframe src="${anime.trailer.embed_url}" allowfullscreen></iframe></div>` : ''}
                 </div>
             `;
+            
+            refreshModalButtons(anime.mal_id);
             DOM.modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            DOM.modalBody.scrollTop = 0; // Ensures user starts at the top of the content
+            DOM.modalBody.scrollTop = 0; 
         }
 
-        const closeAndStopVideo = () => {
-            DOM.modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            DOM.modalBody.innerHTML = ''; 
-        };
+        // ================= MY LIST DASHBOARD LOGIC =================
+        window.updateEpisode = function(id, delta) {
+            const entry = otakuDatabase[id];
+            if(!entry) return;
+            
+            let newProg = parseInt(entry.progress) + delta;
+            
+            // Constraints
+            if(newProg < 0) newProg = 0;
+            if(entry.totalEpisodes && newProg > entry.totalEpisodes) newProg = entry.totalEpisodes;
+            
+            entry.progress = newProg;
+            
+            // Auto-move to completed if maxed
+            if(entry.totalEpisodes && entry.progress === entry.totalEpisodes) {
+                entry.status = 'completed';
+            }
+            
+            saveDatabase();
+            loadMyListDashboard();
+        }
+
+        window.setEpisode = function(id, inputVal) {
+            const entry = otakuDatabase[id];
+            if(!entry) return;
+            
+            let val = parseInt(inputVal) || 0;
+            if(val < 0) val = 0;
+            if(entry.totalEpisodes && val > entry.totalEpisodes) val = entry.totalEpisodes;
+            
+            entry.progress = val;
+            if(entry.totalEpisodes && entry.progress === entry.totalEpisodes) entry.status = 'completed';
+            
+            saveDatabase();
+            loadMyListDashboard();
+        }
+
+        window.removeFromList = function(id) {
+            delete otakuDatabase[id];
+            saveDatabase();
+            loadMyListDashboard();
+        }
+
+        // Opens modal direct from database without full API call initially
+        window.openFromList = async function(id) {
+            try {
+                const res = await fetch(`${API_BASE}/anime/${id}`);
+                const data = await res.json();
+                openModal(data.data);
+            } catch(e) { alert("Failed to load anime details."); }
+        }
+
+        function loadMyListDashboard() {
+            currentCategory = 'mylist';
+            infiniteScrollEnabled = false;
+            DOM.loadingTrigger.classList.add('hidden');
+            DOM.mainGrid.classList.add('hidden');
+            DOM.myListGrid.classList.remove('hidden');
+            DOM.gridTitle.innerText = "My Personal Anime Tracker";
+
+            const secWatching = document.getElementById('list-watching');
+            const secPlanned = document.getElementById('list-planned');
+            const secCompleted = document.getElementById('list-completed');
+
+            secWatching.innerHTML = ''; secPlanned.innerHTML = ''; secCompleted.innerHTML = '';
+
+            Object.values(otakuDatabase).forEach(item => {
+                const maxHtml = item.totalEpisodes ? `max="${item.totalEpisodes}"` : '';
+                const totalText = item.totalEpisodes ? ` / ${item.totalEpisodes}` : ' / ?';
+                
+                // Construct the Episode UI strictly for 'watching'
+                let epControls = '';
+                if(item.status === 'watching') {
+                    epControls = `
+                        <div class="ep-controls">
+                            <button class="ep-btn" onclick="updateEpisode(${item.id}, -1)">-</button>
+                            <input class="ep-input" type="number" value="${item.progress}" ${maxHtml} onchange="setEpisode(${item.id}, this.value)">
+                            <button class="ep-btn" onclick="updateEpisode(${item.id}, 1)">+</button>
+                            <span class="ep-total">${totalText}</span>
+                        </div>
+                    `;
+                }
+
+                const cardHTML = `
+                    <div class="list-item-card">
+                        <span class="remove-btn" onclick="removeFromList(${item.id})">×</span>
+                        <img src="${item.poster}" onclick="openFromList(${item.id})">
+                        <div class="list-item-info">
+                            <div class="list-item-title" onclick="openFromList(${item.id})">${item.title}</div>
+                            ${epControls}
+                        </div>
+                    </div>
+                `;
+
+                if(item.status === 'watching') secWatching.innerHTML += cardHTML;
+                else if(item.status === 'planned') secPlanned.innerHTML += cardHTML;
+                else if(item.status === 'completed') secCompleted.innerHTML += cardHTML;
+            });
+
+            if(!secWatching.innerHTML) secWatching.innerHTML = '<p style="color:#777;text-align:center;">No anime here yet.</p>';
+            if(!secPlanned.innerHTML) secPlanned.innerHTML = '<p style="color:#777;text-align:center;">No anime here yet.</p>';
+            if(!secCompleted.innerHTML) secCompleted.innerHTML = '<p style="color:#777;text-align:center;">No anime here yet.</p>';
+        }
+
+        const closeAndStopVideo = () => { DOM.modal.style.display = 'none'; document.body.style.overflow = 'auto'; DOM.modalBody.innerHTML = ''; };
         document.getElementById('close-modal').onclick = closeAndStopVideo;
         window.onclick = (e) => { if (e.target === DOM.modal) closeAndStopVideo(); }
     </script>
