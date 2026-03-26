@@ -55,16 +55,20 @@
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
         .movie-grid.pick-layout, .tracker-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto 2rem; }
 
-        .movie-card { background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center; padding-bottom: 10px; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid transparent;}
+        /* HORIZONTAL SCROLL FIX: Added min-width: 0 and max-width: 100% to strictly contain the cards */
+        .movie-card { 
+            background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center; padding-bottom: 10px; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid transparent;
+            min-width: 0; max-width: 100%;
+        }
         .movie-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 15px rgba(0,0,0,0.6); }
         .movie-card img { width: 100%; height: 280px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #000; }
-        .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .movie-card h3 { font-size: 1rem; padding: 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
         .rank-badge { position: absolute; top: -10px; left: -10px; background: var(--accent-color); color: var(--primary-bg); font-weight: bold; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; z-index: 5; font-size: 1.1rem; border: 2px solid var(--primary-bg); box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
         .loading-trigger { height: 60px; display: flex; justify-content: center; align-items: center; color: var(--accent-color); font-weight: bold; margin-top: 2rem; }
 
         /* ================= TRACKER UI SPECIFICS ================= */
-        .tracker-section { margin-bottom: 3rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 10px;}
+        .tracker-section { margin-bottom: 3rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 10px; max-width: 100%; overflow-x: hidden; }
         .tracker-section h2 { border-bottom: 2px solid; padding-bottom: 10px; margin-bottom: 20px;}
         #sec-watching h2 { color: var(--watching-color); border-color: var(--watching-color); }
         #sec-planned h2 { color: var(--planned-color); border-color: var(--planned-color); }
@@ -73,15 +77,13 @@
         .remove-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: #ff4d4d; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; cursor: pointer; z-index: 10; transition: 0.2s;}
         .remove-btn:hover { background: #ff4d4d; color: white; transform: scale(1.1); }
 
-        .ep-controls { display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 10px; padding: 0 5px; }
+        /* EPISODE COUNTER OVERFLOW FIX: Added flex-wrap */
+        .ep-controls { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 10px; padding: 0 5px; }
         .ep-btn { background: var(--primary-bg); color: var(--text-light); border: 1px solid var(--accent-color); border-radius: 4px; width: 30px; height: 30px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; transition: 0.2s;}
         .ep-btn:hover { background: var(--accent-color); color: var(--primary-bg); }
         
         .ep-input { width: 45px; height: 30px; text-align: center; background: var(--primary-bg); color: var(--text-light); border: 1px solid var(--text-muted); border-radius: 4px; outline: none; font-weight: bold;}
-        
-        /* HIDE DEFAULT BROWSER NUMBER SPINNERS */
-        .ep-input::-webkit-outer-spin-button,
-        .ep-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .ep-input::-webkit-outer-spin-button, .ep-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .ep-input[type=number] { -moz-appearance: textfield; }
 
         .ep-total { color: var(--text-muted); font-size: 0.9rem; margin-left: 5px;}
@@ -128,7 +130,9 @@
             .nav-links li { width: 100%; text-align: center; padding: 15px 0; }
             .hero-picks { flex-direction: column; height: auto; }
             .hero-card { height: 350px; }
-            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            
+            /* MOBILE GRID FIX: Bound tracker-grid to the same rules */
+            .movie-grid, .tracker-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
             .movie-card img { height: 220px; }
             
             .modal-content { max-width: 95vw; }
@@ -436,7 +440,6 @@
                 const maxHtml = item.totalEpisodes ? `max="${item.totalEpisodes}"` : '';
                 
                 let controlsHTML = '';
-                // Hide episode counters for movies OR if the anime is only 1 episode long
                 if(item.status === 'watching' && item.type !== 'Movie' && item.totalEpisodes !== 1) {
                     controlsHTML = `
                         <div class="ep-controls" onclick="event.stopPropagation()">
@@ -582,8 +585,6 @@
             const safeSynopsis = fullSynopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
             let actionButtonsHTML = '';
-            // If it's a Movie OR has exactly 1 episode, hide the "Watching" button. 
-            // It only makes sense to "Plan to Watch" or mark "Completed".
             if (isMovie || anime.episodes === 1) {
                 actionButtonsHTML = `
                     <button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${!canComplete ? 'disabled title="Has not aired yet"' : ''}>✔ Completed</button>
