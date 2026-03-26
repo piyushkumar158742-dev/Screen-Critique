@@ -52,17 +52,8 @@
         .hero-poster { height: 95%; width: auto; max-width: 100%; object-fit: contain; z-index: 2; box-shadow: 0 0 20px rgba(0,0,0,0.8); border-radius: 8px; }
         .hero-info { position: absolute; bottom: 0; left: 0; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.95)); width: 100%; z-index: 3; text-align: center; }
 
-        /* Standard Grid */
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
-        
-        /* 5-Item Forced Layouts */
-        .movie-grid.pick-layout, .tracker-grid { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 1.5rem; 
-            max-width: 1200px; 
-            margin: 0 auto 2rem; 
-        }
+        .movie-grid.pick-layout, .tracker-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto 2rem; }
 
         .movie-card { background-color: var(--secondary-bg); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center; padding-bottom: 10px; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid transparent;}
         .movie-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 15px rgba(0,0,0,0.6); }
@@ -149,7 +140,7 @@
         <ul class="nav-links" id="nav-list">
             <li data-category="home" class="active">Home</li>
             <li data-category="upcoming">Upcoming</li>
-            <li data-category="movies">Anime Movies</li>
+            <li data-category="underrated">Underrated</li>
             <li data-category="pick">Today's Pick</li>
             <li data-category="mylist" style="color: #FFC107; font-weight: bold;">My List</li>
         </ul>
@@ -202,6 +193,13 @@
         let currentActiveAnime = null;
 
         function saveDatabase() { localStorage.setItem('otakuTracker', JSON.stringify(otakuDatabase)); }
+
+        // ================= BANNER LOGIC =================
+        // Permanently ban 'Steel Ball Run' from showing up anywhere
+        function isBanned(anime) {
+            const title = (anime.title_english || anime.title || '').toLowerCase();
+            return title.includes('steel ball run');
+        }
 
         const DOM = {
             logo: document.getElementById('site-logo'),
@@ -277,7 +275,9 @@
                 
                 const res = await fetch(`${API_BASE}/anime?q=${encodeURIComponent(query)}&sfw=true`);
                 const data = await res.json();
-                const validAnimes = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
+                
+                // Filter out broken trailers, images, and banned animes
+                const validAnimes = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url && !isBanned(a));
                 renderGrid(validAnimes, false, true);
             }
         });
@@ -286,7 +286,7 @@
             try {
                 const res = await fetch(`${API_BASE}/top/anime?limit=25`);
                 const data = await res.json();
-                const valid = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
+                const valid = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url && !isBanned(a));
                 valid.sort(() => 0.5 - Math.random());
                 const topTwo = valid.slice(0, 2);
                 
@@ -336,30 +336,30 @@
 
                     const maxLength = Math.max(mastData.data.length, gemData.data.length);
                     for(let i=0; i<maxLength; i++) {
-                        if(mastData.data[i]) animes.push(mastData.data[i]);
-                        if(gemData.data[i]) animes.push(gemData.data[i]);
+                        if(mastData.data[i] && !isBanned(mastData.data[i])) animes.push(mastData.data[i]);
+                        if(gemData.data[i] && !isBanned(gemData.data[i])) animes.push(gemData.data[i]);
                     }
                     if (!mastData.pagination.has_next_page) infiniteScrollEnabled = false;
                 } 
-                else if (catKey === 'movies') {
-                    DOM.gridTitle.innerText = "Top Rated Anime Movies";
-                    const res = await fetch(`${API_BASE}/anime?type=movie&order_by=popularity&sort=desc&page=${currentPage}`);
+                else if (catKey === 'underrated') {
+                    DOM.gridTitle.innerText = "Hidden Gems & Underrated Masterpieces";
+                    const res = await fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`);
                     const data = await res.json();
-                    animes = data.data;
+                    animes = data.data.filter(a => !isBanned(a));
                     if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
                 }
                 else if (catKey === 'upcoming') {
                     DOM.gridTitle.innerText = "Highly Hyped Upcoming Anime";
                     const res = await fetch(`${API_BASE}/top/anime?filter=upcoming&page=${currentPage}`);
                     const data = await res.json();
-                    animes = data.data;
+                    animes = data.data.filter(a => !isBanned(a));
                     if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
                 } 
                 else if (catKey === 'pick') {
                     DOM.gridTitle.innerText = "Today's Top 10 Picks";
                     const res = await fetch(`${API_BASE}/top/anime?filter=favorite&limit=25`);
                     const data = await res.json();
-                    let validAnimes = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url);
+                    let validAnimes = data.data.filter(a => a.images.jpg.large_image_url && a.trailer.embed_url && !isBanned(a));
                     const dayOfMonth = new Date().getDate(); 
                     const startIdx = dayOfMonth % validAnimes.length; 
                     animes = validAnimes.concat(validAnimes).slice(startIdx, startIdx + 10);
@@ -481,18 +481,26 @@
             updateEpData(id, parseInt(val) || 1);
         }
 
+        // The Strict Episode Cap Logic
         function updateEpData(id, val) {
             const entry = otakuDatabase[id];
-            if(val < 1) val = 1; // Cannot drop below 1
             
+            // Hard limit: Can never drop below 1
+            if(val < 1) val = 1; 
+            
+            // Limit based on known episodes
             if(entry.totalEpisodes && val >= entry.totalEpisodes) {
-                val = entry.totalEpisodes;
-                entry.status = 'completed'; // Auto-move to completed
+                val = entry.totalEpisodes; // Cap the value
+                
+                // ONLY move to completed if the anime has actually finished airing in real life
+                if(entry.airingStatus === 'Finished Airing') {
+                    entry.status = 'completed'; 
+                }
             }
             
             entry.progress = val;
             saveDatabase();
-            loadMyListDashboard(); // refresh grid live
+            loadMyListDashboard(); 
         }
 
         window.removeFromList = function(id) {
@@ -505,10 +513,17 @@
             const anime = currentActiveAnime;
             if(!anime) return;
             
-            // Validation: Cannot add Upcoming to Watching/Completed
+            // Constraint: Cannot add uncompleted shows to completed
+            const canComplete = anime.status === 'Finished Airing';
+            if (status === 'completed' && !canComplete) {
+                alert("This anime has not finished airing yet! You cannot mark it as completed.");
+                return;
+            }
+
+            // Constraint: Cannot add upcoming to watching
             const isUpcoming = (anime.status === 'Not yet aired' || anime.status === 'Upcoming');
-            if (isUpcoming && (status === 'watching' || status === 'completed')) {
-                return; // Guard rail
+            if (isUpcoming && status === 'watching') {
+                return; 
             }
 
             otakuDatabase[anime.mal_id] = {
@@ -516,9 +531,10 @@
                 title: anime.title_english || anime.title,
                 poster: anime.images.jpg.large_image_url,
                 totalEpisodes: anime.episodes,
-                type: anime.type, // Store type to hide episodes for movies
+                type: anime.type,
+                airingStatus: anime.status, // Save to check later
                 status: status,
-                progress: otakuDatabase[anime.mal_id]?.progress || 1 // default to 1
+                progress: otakuDatabase[anime.mal_id]?.progress || 1 // Defaults to 1
             };
             
             if(status === 'completed' && anime.episodes) otakuDatabase[anime.mal_id].progress = anime.episodes;
@@ -555,7 +571,10 @@
             const title = anime.title_english || anime.title;
             const genres = anime.genres ? anime.genres.map(g => g.name).join(', ') : 'N/A';
             const studios = anime.studios ? anime.studios.map(s => s.name).join(', ') : 'N/A';
+            
+            // Airing Status Logic
             const isUpcoming = (anime.status === 'Not yet aired' || anime.status === 'Upcoming');
+            const canComplete = (anime.status === 'Finished Airing');
             const isMovie = (anime.type === 'Movie');
             
             const fullSynopsis = anime.synopsis || 'No synopsis available.';
@@ -567,15 +586,13 @@
             }
             const safeSynopsis = fullSynopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-            // Generate Action Buttons based on Movie / Upcoming conditions
+            // Generate Buttons with Strict Logic applied
             let actionButtonsHTML = '';
             if (isMovie) {
-                // Movie Constraint: Only show completed
-                actionButtonsHTML = `<button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${isUpcoming ? 'disabled title="Not aired yet"' : ''}>✔ Completed</button>`;
+                actionButtonsHTML = `<button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${!canComplete ? 'disabled title="Movie has not aired yet"' : ''}>✔ Completed</button>`;
             } else {
-                // TV Constraint: Show all 3
                 actionButtonsHTML = `
-                    <button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${isUpcoming ? 'disabled title="Not aired yet"' : ''}>✔ Completed</button>
+                    <button id="btn-completed" class="action-btn btn-completed" onclick="updateListStatus('completed')" ${!canComplete ? 'disabled title="Anime has not finished airing"' : ''}>✔ Completed</button>
                     <button id="btn-watching" class="action-btn btn-watching" onclick="updateListStatus('watching')" ${isUpcoming ? 'disabled title="Not aired yet"' : ''}>▶ Watching</button>
                     <button id="btn-planned" class="action-btn btn-planned" onclick="updateListStatus('planned')">🗓 Going to Watch</button>
                 `;
