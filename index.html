@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Otaku Critique | Pro</title>
+    <title>Otaku Critique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,67 +15,57 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        brand: { 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' }, // Vibrant Violet
+                        brand: { 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
                         surface: { 50: '#f8fafc', 800: '#1e293b', 900: '#0f172a' }
-                    },
-                    transitionTimingFunction: {
-                        'spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom Pro Typography & Utilities */
         body { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
-        h1, h2, h3 { line-height: 1.15; letter-spacing: -0.03em; }
-        
-        /* Hide scrollbars but keep functionality */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-        /* The "Shimmer" Hover Effect on Cards */
         .bento-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bento-card:hover { transform: translateY(-6px); box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.15), 0 8px 10px -6px rgba(139, 92, 246, 0.1); border-color: #8b5cf6; }
 
-        /* Toast Animation */
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Mobile Nav Toggle Animation */
+        #mobile-nav-menu { transition: max-height 0.3s ease-in-out, opacity 0.3s; max-height: 0; opacity: 0; overflow: hidden; }
+        #mobile-nav-menu.show { max-height: 400px; opacity: 1; }
+
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .toast-enter { animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
-        /* Disable number inputs */
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden bg-surface-900 text-slate-100 antialiased">
 
-    <aside class="hidden md:flex flex-col w-64 h-full border-r border-slate-800 bg-surface-900/50 backdrop-blur-xl z-50 transition-all duration-300">
-        <div class="p-6 flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
+    <aside class="hidden md:flex flex-col w-64 h-full border-r border-slate-800 bg-surface-900/50 backdrop-blur-xl z-50">
+        <div class="p-6 flex items-center gap-3 cursor-pointer group" id="desktop-logo">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30 group-hover:scale-110 transition-transform">
                 <i data-lucide="play" class="w-5 h-5 text-white"></i>
             </div>
-            <h1 class="text-xl font-extrabold tracking-tighter text-white">Otaku<span class="text-brand-500">Critique</span></h1>
+            <h1 class="text-xl font-extrabold tracking-tighter text-white group-hover:text-brand-400 transition-colors">Otaku<span class="text-brand-500 group-hover:text-white">Critique</span></h1>
         </div>
         
-        <nav class="flex-1 px-4 space-y-2 mt-4" id="nav-list">
-            <button data-category="home" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all active:scale-95 group">
-                <i data-lucide="home" class="w-5 h-5 group-hover:text-brand-400 transition-colors"></i><span class="font-medium">Home</span>
+        <nav class="flex-1 px-4 space-y-2 mt-2" id="nav-list-desktop">
+            <button data-category="home" class="nav-btn active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white bg-slate-800/50 hover:bg-slate-800 transition-all active:scale-95 group">
+                <i data-lucide="home" class="w-5 h-5 text-brand-400"></i><span class="font-medium">Home</span>
             </button>
             <button data-category="upcoming" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all active:scale-95 group">
-                <i data-lucide="calendar-clock" class="w-5 h-5 group-hover:text-brand-400 transition-colors"></i><span class="font-medium">Upcoming</span>
+                <i data-lucide="calendar-clock" class="w-5 h-5 group-hover:text-brand-400"></i><span class="font-medium">Upcoming</span>
             </button>
-            <button data-category="movies" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all active:scale-95 group">
-                <i data-lucide="film" class="w-5 h-5 group-hover:text-brand-400 transition-colors"></i><span class="font-medium">Movies</span>
+            <button data-category="underrated" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all active:scale-95 group">
+                <i data-lucide="gem" class="w-5 h-5 group-hover:text-brand-400"></i><span class="font-medium">Underrated</span>
             </button>
             <button data-category="pick" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all active:scale-95 group">
-                <i data-lucide="flame" class="w-5 h-5 group-hover:text-brand-400 transition-colors"></i><span class="font-medium">Today's Pick</span>
+                <i data-lucide="flame" class="w-5 h-5 group-hover:text-brand-400"></i><span class="font-medium">Today's Pick</span>
             </button>
-            
-            <div class="pt-6 pb-2">
-                <p class="px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Your Dashboard</p>
-            </div>
-            <button data-category="mylist" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-brand-400 bg-brand-500/10 border border-brand-500/20 hover:bg-brand-500/20 transition-all active:scale-95 shadow-lg shadow-brand-500/5">
+            <button data-category="mylist" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-brand-400 hover:bg-brand-500/10 transition-all active:scale-95 border border-transparent hover:border-brand-500/20">
                 <i data-lucide="library" class="w-5 h-5"></i><span class="font-bold">My List</span>
             </button>
         </nav>
@@ -83,147 +73,275 @@
 
     <main class="flex-1 h-full flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800/40 via-surface-900 to-surface-900">
         
-        <header class="sticky top-0 z-40 w-full px-6 py-4 flex items-center justify-between gap-4 backdrop-blur-xl bg-surface-900/70 border-b border-slate-800/60">
-            <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-400 hover:text-white active:scale-95 transition-all"><i data-lucide="menu"></i></button>
-            
-            <div class="relative w-full max-w-md ml-auto">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500"></i>
-                <input type="text" id="search-box" placeholder="Search anime, movies, or characters..." 
-                    class="w-full pl-12 pr-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all shadow-inner placeholder-slate-500">
+        <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-surface-900/90 border-b border-slate-800 flex flex-col">
+            <div class="px-4 py-4 flex items-center justify-between gap-4">
+                
+                <div class="flex items-center gap-3 md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 text-brand-400 hover:text-white active:scale-95 transition-all"><i data-lucide="menu"></i></button>
+                    <h1 id="mobile-logo" class="text-xl font-extrabold tracking-tighter text-white cursor-pointer hover:text-brand-400 transition-colors">Otaku<span class="text-brand-500">Critique</span></h1>
+                </div>
+
+                <div class="relative w-full max-w-md ml-auto">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500"></i>
+                    <input type="text" id="search-box" placeholder="Search anime..." autocomplete="off"
+                        class="w-full pl-12 pr-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all placeholder-slate-500">
+                    
+                    <div id="search-suggestions" class="absolute top-full mt-2 left-0 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50 hidden flex-col"></div>
+                </div>
             </div>
+
+            <nav id="mobile-nav-menu" class="md:hidden flex flex-col bg-slate-800/80 border-t border-slate-700/50 px-4">
+                <button data-category="home" class="nav-btn-mobile text-left px-4 py-3 text-white border-b border-slate-700/50 font-bold text-brand-400">Home</button>
+                <button data-category="upcoming" class="nav-btn-mobile text-left px-4 py-3 text-slate-300 border-b border-slate-700/50">Upcoming</button>
+                <button data-category="underrated" class="nav-btn-mobile text-left px-4 py-3 text-slate-300 border-b border-slate-700/50">Underrated</button>
+                <button data-category="pick" class="nav-btn-mobile text-left px-4 py-3 text-slate-300 border-b border-slate-700/50">Today's Pick</button>
+                <button data-category="mylist" class="nav-btn-mobile text-left px-4 py-3 text-brand-400 font-bold mb-2">My List</button>
+            </nav>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth" id="scroll-container">
-            
-            <div class="flex items-center justify-between mb-8">
-                <h2 id="grid-title" class="text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-                    <span class="w-2 h-8 rounded-full bg-brand-500"></span>
-                    Discover
-                </h2>
-            </div>
+        <div class="flex-1 overflow-y-auto p-4 md:p-8" id="scroll-container">
+            <h2 id="grid-title" class="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3 mb-6">
+                <span class="w-2 h-8 rounded-full bg-brand-500"></span> Discover
+            </h2>
 
-            <div id="main-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+            <div id="main-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"></div>
 
-            <div id="my-list-container" class="hidden flex flex-col gap-8 w-full max-w-7xl mx-auto">
-                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold text-orange-400 mb-6 flex items-center gap-2"><i data-lucide="play-circle"></i> Currently Watching</h3>
-                    <div id="grid-watching" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            <div id="my-list-container" class="hidden flex flex-col gap-6 w-full max-w-7xl mx-auto">
+                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-5">
+                    <h3 class="text-xl font-bold text-orange-400 mb-4 flex items-center gap-2"><i data-lucide="play-circle"></i> Watching</h3>
+                    <div id="grid-watching" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
-                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold text-blue-400 mb-6 flex items-center gap-2"><i data-lucide="calendar"></i> Going to Watch</h3>
-                    <div id="grid-planned" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-5">
+                    <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2"><i data-lucide="calendar"></i> Going to Watch</h3>
+                    <div id="grid-planned" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
-                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
-                    <h3 class="text-xl font-bold text-green-400 mb-6 flex items-center gap-2"><i data-lucide="check-circle-2"></i> Completed</h3>
-                    <div id="grid-completed" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                <div class="bg-slate-800/30 border border-slate-700/50 rounded-3xl p-5">
+                    <h3 class="text-xl font-bold text-green-400 mb-4 flex items-center gap-2"><i data-lucide="check-circle-2"></i> Completed</h3>
+                    <div id="grid-completed" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
             </div>
 
-            <div id="loading-trigger" class="hidden w-full py-12 flex justify-center">
+            <div id="loading-trigger" class="hidden w-full py-10 flex justify-center">
                 <i data-lucide="loader-2" class="w-8 h-8 text-brand-500 animate-spin"></i>
             </div>
         </div>
     </main>
 
-    <div id="toast" class="fixed bottom-6 right-6 hidden z-[9999] bg-slate-800 border border-slate-700 shadow-2xl shadow-brand-500/20 rounded-2xl p-4 flex items-center gap-3">
+    <div id="toast" class="fixed bottom-6 right-6 hidden z-[9999] bg-slate-800 border border-slate-700 shadow-2xl rounded-2xl p-4 flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><i data-lucide="check" class="w-5 h-5"></i></div>
         <p id="toast-msg" class="text-sm font-medium text-slate-200">Added to list</p>
     </div>
 
     <div id="movie-modal" class="fixed inset-0 z-[5000] hidden items-center justify-center px-4 py-6 sm:p-0">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="relative w-full max-w-4xl bg-slate-800 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] transition-spring transform scale-95 opacity-0" id="modal-content-box">
+        <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative w-full max-w-4xl bg-slate-800 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]" id="modal-content-box">
             
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-slate-900/50 hover:bg-slate-700 text-slate-400 hover:text-white backdrop-blur transition-all active:scale-90"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-slate-900/80 text-slate-400 hover:text-white transition-all active:scale-90"><i data-lucide="x" class="w-6 h-6"></i></button>
 
-            <div class="w-full md:w-1/3 bg-slate-900/50 p-6 flex flex-col items-center justify-start border-r border-slate-700/50 overflow-y-auto">
-                <img id="modal-img" class="w-full max-w-[240px] rounded-2xl shadow-2xl object-cover" src="" alt="Poster">
+            <div class="w-full md:w-[320px] bg-slate-900/50 p-6 flex flex-col items-center justify-start border-r border-slate-700/50 shrink-0 overflow-y-auto">
+                <img id="modal-img" class="w-full max-w-[220px] md:max-w-full rounded-2xl shadow-2xl object-cover" src="">
                 <div id="modal-actions" class="w-full mt-6 flex flex-col gap-3"></div>
             </div>
 
-            <div class="w-full md:w-2/3 p-6 md:p-10 overflow-y-auto flex flex-col gap-6" id="modal-body">
-                <div>
-                    <h2 id="modal-title" class="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight"></h2>
-                    <div class="flex flex-wrap gap-2 text-sm font-medium text-slate-400 items-center">
-                        <span id="modal-score" class="flex items-center gap-1 text-brand-400 bg-brand-500/10 px-2 py-1 rounded-md"><i data-lucide="star" class="w-4 h-4"></i></span>
-                        <span id="modal-date" class="bg-slate-700/50 px-2 py-1 rounded-md"></span>
-                        <span id="modal-status" class="bg-slate-700/50 px-2 py-1 rounded-md"></span>
-                    </div>
+            <div class="w-full md:flex-1 p-6 md:p-8 overflow-y-auto flex flex-col gap-4">
+                <h2 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight pr-8"></h2>
+                
+                <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-300">
+                    <span id="modal-score" class="flex items-center gap-1 text-brand-400 bg-brand-500/10 px-2 py-1 rounded border border-brand-500/20"><i data-lucide="star" class="w-3 h-3"></i></span>
+                    <span id="modal-rank" class="bg-slate-700 px-2 py-1 rounded"></span>
+                    <span id="modal-status" class="bg-slate-700 px-2 py-1 rounded"></span>
+                    <span id="modal-duration" class="bg-slate-700 px-2 py-1 rounded"></span>
+                    <span id="modal-rating" class="bg-slate-700 px-2 py-1 rounded text-orange-300"></span>
                 </div>
-                <div id="modal-genres" class="flex flex-wrap gap-2"></div>
-                <div class="prose prose-invert max-w-none">
-                    <p id="modal-synopsis" class="text-slate-300 leading-relaxed text-sm sm:text-base"></p>
-                </div>
-                <div id="modal-trailer" class="w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 mt-auto border border-slate-700/50 shadow-lg"></div>
+                
+                <p id="modal-source-studio" class="text-sm text-slate-400 font-medium"></p>
+                <div id="modal-genres" class="flex flex-wrap gap-2 mb-2"></div>
+                
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    <span id="modal-synopsis"></span>
+                    <button id="read-more-btn" class="hidden text-brand-400 font-bold ml-1 hover:underline outline-none" onclick="toggleSynopsis()"></button>
+                </p>
+
+                <div id="modal-trailer" class="w-full aspect-video rounded-xl overflow-hidden bg-slate-900 mt-4 border border-slate-700/50 shadow-lg"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
         const API_BASE = 'https://api.jikan.moe/v4';
-        let otakuDatabase = JSON.parse(localStorage.getItem('otakuTrackerV2')) || {};
+        let otakuDatabase = JSON.parse(localStorage.getItem('otakuTrackerV3')) || {};
         let currentActiveAnime = null;
+        let fullSynopsisText = "";
+        let isSynopsisTruncated = true;
+        
         let currentCategory = 'home';
         let currentPage = 1;
         let isFetching = false;
         let infiniteScrollEnabled = true;
+        let searchDebounceTimer;
+
+        // BANNED LOGIC
+        function isBanned(anime) {
+            const title = (anime.title_english || anime.title || '').toLowerCase();
+            return title.includes('steel ball run');
+        }
+
+        // REMOVE DUPLICATES LOGIC
+        function removeDuplicates(animes) {
+            const seen = new Set();
+            return animes.filter(a => {
+                if(seen.has(a.mal_id)) return false;
+                seen.add(a.mal_id);
+                return true;
+            });
+        }
 
         const DOM = {
             searchBox: document.getElementById('search-box'),
+            searchSuggestions: document.getElementById('search-suggestions'),
             mainGrid: document.getElementById('main-grid'),
             myListContainer: document.getElementById('my-list-container'),
             gridTitle: document.getElementById('grid-title'),
             loadingTrigger: document.getElementById('loading-trigger'),
+            mobileMenuBtn: document.getElementById('mobile-menu-btn'),
+            mobileNavMenu: document.getElementById('mobile-nav-menu'),
+            desktopLogo: document.getElementById('desktop-logo'),
+            mobileLogo: document.getElementById('mobile-logo'),
             modal: document.getElementById('movie-modal'),
-            modalBox: document.getElementById('modal-content-box'),
-            navBtns: document.querySelectorAll('.nav-btn'),
             scrollContainer: document.getElementById('scroll-container')
         };
 
-        // --- CORE INITIALIZATION ---
+        // --- INIT & LOGO CLICKS ---
         document.addEventListener('DOMContentLoaded', () => {
             loadCategory('home', true);
             setupIntersectionObserver();
-            
-            DOM.navBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const cat = e.currentTarget.getAttribute('data-category');
-                    DOM.navBtns.forEach(b => {
-                        b.classList.remove('bg-slate-800/50', 'text-white');
-                        b.classList.add('text-slate-400');
-                    });
-                    e.currentTarget.classList.remove('text-slate-400');
-                    e.currentTarget.classList.add('bg-slate-800/50', 'text-white');
-                    
-                    if (cat === 'mylist') loadMyListDashboard();
-                    else loadCategory(cat, true);
-                });
+            preloadBackgroundPages(); // Fetch API into browser cache
+        });
+
+        const goHome = () => {
+            DOM.mobileNavMenu.classList.remove('show');
+            highlightNav('home');
+            DOM.searchBox.value = '';
+            DOM.searchSuggestions.classList.add('hidden');
+            loadCategory('home', true);
+        };
+        DOM.desktopLogo.addEventListener('click', goHome);
+        DOM.mobileLogo.addEventListener('click', goHome);
+
+        // --- NAVIGATION LOGIC ---
+        function highlightNav(cat) {
+            document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
+                if(btn.classList.contains('nav-btn')) {
+                    btn.classList.remove('bg-slate-800/50', 'text-white');
+                    btn.classList.add('text-slate-400');
+                    btn.querySelector('i').classList.remove('text-brand-400');
+                } else {
+                    btn.classList.remove('text-brand-400', 'font-bold');
+                    btn.classList.add('text-slate-300');
+                }
+                
+                if(btn.getAttribute('data-category') === cat) {
+                    if(btn.classList.contains('nav-btn')) {
+                        btn.classList.remove('text-slate-400');
+                        btn.classList.add('bg-slate-800/50', 'text-white');
+                        btn.querySelector('i').classList.add('text-brand-400');
+                    } else {
+                        btn.classList.remove('text-slate-300');
+                        btn.classList.add('text-brand-400', 'font-bold');
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cat = e.currentTarget.getAttribute('data-category');
+                DOM.mobileNavMenu.classList.remove('show');
+                highlightNav(cat);
+                DOM.searchBox.value = '';
+                DOM.searchSuggestions.classList.add('hidden');
+                
+                if (cat === 'mylist') loadMyListDashboard();
+                else loadCategory(cat, true);
             });
         });
 
-        // --- SEARCH ---
+        DOM.mobileMenuBtn.addEventListener('click', () => DOM.mobileNavMenu.classList.toggle('show'));
+
+        // --- LIVE SEARCH (IMDb style) ---
+        DOM.searchBox.addEventListener('input', (e) => {
+            clearTimeout(searchDebounceTimer);
+            const query = e.target.value.trim();
+            if (query.length < 3) { DOM.searchSuggestions.classList.add('hidden'); return; }
+
+            searchDebounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`${API_BASE}/anime?q=${encodeURIComponent(query)}&limit=5&sfw=true`);
+                    const data = await res.json();
+                    let results = removeDuplicates(data.data.filter(a => !isBanned(a) && a.images.jpg.large_image_url));
+                    
+                    DOM.searchSuggestions.innerHTML = '';
+                    if(results.length > 0) {
+                        results.forEach(anime => {
+                            const item = document.createElement('div');
+                            item.className = 'suggestion-item hover:bg-slate-700/50 p-2 border-b border-slate-700';
+                            item.innerHTML = `<img src="${anime.images.jpg.image_url}" class="w-10 h-12 object-cover rounded">
+                                              <div class="flex flex-col"><span class="font-bold text-sm text-white">${anime.title_english || anime.title}</span><span class="text-xs text-brand-400">★ ${anime.score || 'N/A'}</span></div>`;
+                            item.onclick = () => { DOM.searchSuggestions.classList.add('hidden'); openModal(anime); };
+                            DOM.searchSuggestions.appendChild(item);
+                        });
+                        DOM.searchSuggestions.classList.remove('hidden');
+                    } else {
+                        DOM.searchSuggestions.innerHTML = '<div class="p-3 text-sm text-slate-500 text-center">No results found</div>';
+                        DOM.searchSuggestions.classList.remove('hidden');
+                    }
+                } catch(err) {}
+            }, 500);
+        });
+
         DOM.searchBox.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && DOM.searchBox.value.trim()) {
                 const query = DOM.searchBox.value.trim();
+                DOM.searchSuggestions.classList.add('hidden');
+                DOM.mobileNavMenu.classList.remove('show');
+                highlightNav('');
+                
                 DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Results for "${query}"`;
                 currentCategory = 'search';
                 infiniteScrollEnabled = false;
+                DOM.loadingTrigger.classList.add('hidden');
                 DOM.mainGrid.classList.remove('hidden');
                 DOM.myListContainer.classList.add('hidden');
-                DOM.mainGrid.innerHTML = '';
-                DOM.loadingTrigger.classList.remove('hidden');
+                DOM.mainGrid.innerHTML = '<div class="col-span-full flex justify-center py-10"><i data-lucide="loader-2" class="w-8 h-8 text-brand-500 animate-spin"></i></div>';
+                lucide.createIcons();
                 
                 const res = await fetch(`${API_BASE}/anime?q=${encodeURIComponent(query)}&sfw=true`);
                 const data = await res.json();
-                DOM.loadingTrigger.classList.add('hidden');
-                renderGrid(data.data.filter(a => a.images.jpg.large_image_url));
+                let valid = removeDuplicates(data.data.filter(a => !isBanned(a) && a.images.jpg.large_image_url));
+                DOM.mainGrid.innerHTML = '';
+                renderGrid(valid, false);
+            }
+        });
+        
+        // Hide dropdown on click outside
+        document.addEventListener('click', (e) => {
+            if(!DOM.searchBox.contains(e.target) && !DOM.searchSuggestions.contains(e.target)) {
+                DOM.searchSuggestions.classList.add('hidden');
             }
         });
 
-        // --- API FETCHING ---
+        // --- BACKGROUND PRELOADER ---
+        function preloadBackgroundPages() {
+            setTimeout(() => {
+                fetch(`${API_BASE}/top/anime?filter=upcoming&page=1`);
+                fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=21`);
+                fetch(`${API_BASE}/top/anime?filter=favorite&limit=25`);
+            }, 2500);
+        }
+
+        // --- MAIN CATEGORY LOADING ---
         async function loadCategory(catKey, isNewCategory = false) {
             if(isFetching) return;
             isFetching = true;
@@ -234,33 +352,62 @@
                 DOM.mainGrid.innerHTML = '';
                 DOM.mainGrid.classList.remove('hidden');
                 DOM.myListContainer.classList.add('hidden');
+                
+                // Disable loading trigger if "Today's Pick"
                 infiniteScrollEnabled = (catKey !== 'pick'); 
                 if (infiniteScrollEnabled) DOM.loadingTrigger.classList.remove('hidden');
+                else DOM.loadingTrigger.classList.add('hidden');
             }
 
-            let animes = [];
+            let rawAnimes = [];
+            let isRanked = false;
+
             try {
                 if (catKey === 'home') {
-                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Discover Masterpieces`;
-                    const res = await fetch(`${API_BASE}/top/anime?page=${currentPage}`);
-                    animes = (await res.json()).data;
-                } else if (catKey === 'upcoming') {
+                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Masterpieces & Hidden Gems`;
+                    const [mastRes, gemRes] = await Promise.all([
+                        fetch(`${API_BASE}/top/anime?page=${currentPage}`), 
+                        fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`)
+                    ]);
+                    const mastData = await mastRes.json(); const gemData = await gemRes.json();
+                    const maxLength = Math.max(mastData.data.length, gemData.data.length);
+                    for(let i=0; i<maxLength; i++) {
+                        if(mastData.data[i]) rawAnimes.push(mastData.data[i]);
+                        if(gemData.data[i]) rawAnimes.push(gemData.data[i]);
+                    }
+                    if (!mastData.pagination.has_next_page) infiniteScrollEnabled = false;
+                } 
+                else if (catKey === 'underrated') {
+                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Underrated Gems`;
+                    const res = await fetch(`${API_BASE}/anime?order_by=score&sort=desc&page=${currentPage + 20}`);
+                    const data = await res.json();
+                    rawAnimes = data.data;
+                    if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
+                }
+                else if (catKey === 'upcoming') {
                     DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Highly Hyped Upcoming`;
                     const res = await fetch(`${API_BASE}/top/anime?filter=upcoming&page=${currentPage}`);
-                    animes = (await res.json()).data;
-                } else if (catKey === 'movies') {
-                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Cinematic Features`;
-                    const res = await fetch(`${API_BASE}/anime?type=movie&order_by=popularity&sort=desc&page=${currentPage}`);
-                    animes = (await res.json()).data;
-                } else if (catKey === 'pick') {
-                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Ranked Top 10 Today`;
+                    const data = await res.json();
+                    rawAnimes = data.data;
+                    if (!data.pagination.has_next_page) infiniteScrollEnabled = false;
+                } 
+                else if (catKey === 'pick') {
+                    DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Today's Top 10 Picks`;
                     const res = await fetch(`${API_BASE}/top/anime?filter=favorite&limit=25`);
-                    let valid = (await res.json()).data.filter(a => a.images.jpg.large_image_url);
-                    const startIdx = new Date().getDate() % valid.length; 
-                    animes = valid.concat(valid).slice(startIdx, startIdx + 10);
+                    const data = await res.json();
+                    
+                    let validAnimes = removeDuplicates(data.data.filter(a => !isBanned(a) && a.images.jpg.large_image_url));
+                    const startIdx = new Date().getDate() % validAnimes.length; 
+                    rawAnimes = validAnimes.concat(validAnimes).slice(startIdx, startIdx + 10);
+                    isRanked = true;
                 }
 
-                renderGrid(animes.filter(a => a.images.jpg.large_image_url), catKey === 'pick');
+                // Final filter and deduplication
+                let finalAnimes = removeDuplicates(rawAnimes.filter(a => !isBanned(a) && a.images.jpg.large_image_url));
+                renderGrid(finalAnimes, isRanked, isNewCategory);
+                
+                if (!infiniteScrollEnabled) DOM.loadingTrigger.classList.add('hidden');
+
             } catch (err) { console.error(err); } 
             finally { 
                 isFetching = false; 
@@ -268,21 +415,13 @@
             }
         }
 
-        // --- RENDER GRID (Bento Style with Release Dates) ---
-        function renderGrid(animes, isRanked = false) {
-            if(animes.length === 0 && currentPage === 1) { DOM.mainGrid.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No results found.</p>'; return; }
+        function renderGrid(animes, isRanked = false, isNewCategory = false) {
+            if(animes.length === 0 && isNewCategory) { DOM.mainGrid.innerHTML = '<p class="text-slate-500 col-span-full text-center py-10">No results found.</p>'; return; }
             
             animes.forEach((anime, index) => {
                 const title = anime.title_english || anime.title;
                 const img = anime.images.jpg.large_image_url;
                 
-                // Format Release Date
-                let releaseDate = "Unknown Date";
-                if (anime.aired && anime.aired.from) {
-                    const dateObj = new Date(anime.aired.from);
-                    releaseDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                }
-
                 const badge = isRanked ? `<div class="absolute top-2 left-2 bg-brand-500 text-white font-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-slate-800 z-10">${index + 1}</div>` : '';
 
                 const card = document.createElement('div');
@@ -294,10 +433,9 @@
                         <img src="${img}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-80"></div>
                         <div class="absolute bottom-0 left-0 w-full p-4 flex flex-col justify-end">
-                            <h3 class="text-white font-bold leading-tight mb-1 line-clamp-2">${title}</h3>
-                            <div class="flex items-center gap-2 text-xs font-medium">
-                                <span class="flex items-center gap-1 text-brand-400 bg-brand-500/20 px-2 py-0.5 rounded backdrop-blur-sm"><i data-lucide="star" class="w-3 h-3"></i> ${anime.score || 'N/A'}</span>
-                                <span class="text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded backdrop-blur-sm truncate"><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>${releaseDate}</span>
+                            <h3 class="text-white font-bold leading-tight text-sm sm:text-base line-clamp-2">${title}</h3>
+                            <div class="flex items-center gap-2 mt-1 text-xs font-medium">
+                                <span class="flex items-center gap-1 text-brand-400"><i data-lucide="star" class="w-3 h-3"></i>${anime.score || 'N/A'}</span>
                             </div>
                         </div>
                     </div>
@@ -317,8 +455,8 @@
             ['watching', 'planned', 'completed'].forEach(status => {
                 const container = document.getElementById(`grid-${status}`);
                 container.innerHTML = '';
-                
                 const items = Object.values(otakuDatabase).filter(i => i.status === status);
+                
                 if(items.length === 0) {
                     container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 border-2 border-dashed border-slate-700/50 rounded-2xl">Nothing here yet.</div>`;
                     return;
@@ -329,20 +467,20 @@
                     if(status === 'watching' && item.type !== 'Movie') {
                         epControls = `
                             <div class="flex items-center gap-2 mt-3" onclick="event.stopPropagation()">
-                                <button onclick="changeEp(${item.id}, -1)" class="w-8 h-8 rounded-lg bg-slate-700 text-white hover:bg-brand-500 transition-colors flex items-center justify-center"><i data-lucide="minus" class="w-4 h-4"></i></button>
-                                <input type="number" value="${item.progress}" onchange="setEp(${item.id}, this.value)" class="w-12 h-8 text-center bg-slate-900 border border-slate-700 rounded-lg text-sm font-bold focus:border-brand-500 focus:outline-none">
-                                <button onclick="changeEp(${item.id}, 1)" class="w-8 h-8 rounded-lg bg-slate-700 text-white hover:bg-brand-500 transition-colors flex items-center justify-center"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                <button onclick="changeEp(${item.id}, -1)" class="w-7 h-7 rounded bg-slate-700 text-white hover:bg-brand-500 flex items-center justify-center font-bold">-</button>
+                                <input type="number" value="${item.progress}" onchange="setEp(${item.id}, this.value)" class="w-10 h-7 text-center bg-slate-900 border border-slate-700 rounded text-xs font-bold outline-none">
+                                <button onclick="changeEp(${item.id}, 1)" class="w-7 h-7 rounded bg-slate-700 text-white hover:bg-brand-500 flex items-center justify-center font-bold">+</button>
                                 <span class="text-xs text-slate-400 font-medium">/ ${item.totalEpisodes || '?'}</span>
                             </div>
                         `;
                     }
 
                     const card = document.createElement('div');
-                    card.className = "group relative bg-slate-800 border border-slate-700/50 rounded-2xl p-3 flex gap-4 items-center cursor-pointer hover:border-brand-500 transition-colors shadow-sm hover:shadow-brand-500/10";
+                    card.className = "group relative bg-slate-800 border border-slate-700/50 rounded-2xl p-3 flex gap-3 items-center cursor-pointer hover:border-brand-500 transition-colors shadow-sm";
                     card.onclick = () => openFromDatabase(item.id);
                     card.innerHTML = `
-                        <button onclick="event.stopPropagation(); removeFromList(${item.id})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"><i data-lucide="x" class="w-3 h-3"></i></button>
-                        <img src="${item.poster}" class="w-16 h-24 object-cover rounded-xl shadow-md flex-shrink-0">
+                        <button onclick="event.stopPropagation(); removeFromList(${item.id})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10">✕</button>
+                        <img src="${item.poster}" class="w-14 h-20 object-cover rounded-lg shadow-md flex-shrink-0">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-sm text-white truncate">${item.title}</h4>
                             ${epControls}
@@ -355,7 +493,7 @@
         }
 
         // --- TRACKER LOGIC ---
-        function saveDatabase() { localStorage.setItem('otakuTrackerV2', JSON.stringify(otakuDatabase)); }
+        function saveDatabase() { localStorage.setItem('otakuTrackerV3', JSON.stringify(otakuDatabase)); }
         
         window.openFromDatabase = async function(id) {
             try { const data = await (await fetch(`${API_BASE}/anime/${id}`)).json(); openModal(data.data); } catch(e) {}
@@ -373,14 +511,14 @@
         }
         window.removeFromList = (id) => { delete otakuDatabase[id]; saveDatabase(); loadMyListDashboard(); showToast("Removed from list", "red"); }
 
-        function updateListStatus(status) {
+        window.updateListStatus = function(status) {
             const anime = currentActiveAnime;
             if(status === 'completed' && anime.status !== 'Finished Airing') return showToast("Anime hasn't finished airing yet!", "red");
             if(status === 'watching' && (anime.status === 'Not yet aired' || anime.status === 'Upcoming')) return showToast("Anime hasn't aired yet!", "red");
 
             const prev = otakuDatabase[anime.mal_id];
             let newProg = prev ? prev.progress : 1;
-            if(prev && prev.status === 'completed' && status === 'watching') newProg = 1; // Strict Reset
+            if(prev && prev.status === 'completed' && status === 'watching') newProg = 1; // strict reset
 
             otakuDatabase[anime.mal_id] = {
                 id: anime.mal_id, title: anime.title_english || anime.title, poster: anime.images.jpg.large_image_url,
@@ -397,12 +535,12 @@
             ['watching', 'planned', 'completed'].forEach(s => {
                 const btn = document.getElementById(`btn-${s}`);
                 if(!btn) return;
-                if(db && db.status === s) btn.classList.add('ring-2', 'ring-white', 'scale-[1.02]', 'shadow-lg');
-                else btn.classList.remove('ring-2', 'ring-white', 'scale-[1.02]', 'shadow-lg');
+                if(db && db.status === s) { btn.classList.add('ring-2', 'ring-white', 'opacity-100'); btn.classList.remove('opacity-50'); }
+                else { btn.classList.remove('ring-2', 'ring-white', 'opacity-100'); btn.classList.add('opacity-50'); }
             });
         }
 
-        // --- OPTIMISTIC UI: TOAST ---
+        // --- TOAST NOTIFICATION ---
         function showToast(msg, color = "green") {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -412,62 +550,81 @@
             setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('toast-enter'); }, 3000);
         }
 
-        // --- THE MODAL ---
+        // --- MODAL & SYNOPSIS ---
+        window.toggleSynopsis = function() {
+            const el = document.getElementById('modal-synopsis');
+            const btn = document.getElementById('read-more-btn');
+            isSynopsisTruncated = !isSynopsisTruncated;
+            if(isSynopsisTruncated) {
+                el.innerText = fullSynopsisText.substring(0, 180) + '...';
+                btn.innerText = ' Read More';
+            } else {
+                el.innerText = fullSynopsisText;
+                btn.innerText = ' Show Less';
+            }
+        };
+
         function openModal(anime) {
             if(!anime.genres) { fetch(`${API_BASE}/anime/${anime.mal_id}`).then(r=>r.json()).then(d => openModal(d.data)); return; }
             currentActiveAnime = anime;
             
             document.getElementById('modal-img').src = anime.images.jpg.large_image_url;
             document.getElementById('modal-title').innerText = anime.title_english || anime.title;
-            document.getElementById('modal-score').innerHTML = `<i data-lucide="star" class="w-4 h-4"></i> ${anime.score || 'N/A'}`;
+            document.getElementById('modal-score').innerHTML = `<i data-lucide="star" class="w-3 h-3"></i> ${anime.score || 'N/A'}`;
+            document.getElementById('modal-rank').innerText = `Rank #${anime.rank || 'N/A'}`;
             document.getElementById('modal-status').innerText = anime.status;
+            document.getElementById('modal-duration').innerText = anime.duration || 'N/A';
+            document.getElementById('modal-rating').innerText = anime.rating || 'N/A';
             
-            let releaseDate = "TBA";
-            if (anime.aired && anime.aired.from) releaseDate = new Date(anime.aired.from).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            document.getElementById('modal-date').innerHTML = `<i data-lucide="calendar" class="w-4 h-4 inline mr-1"></i>${releaseDate}`;
-
-            document.getElementById('modal-genres').innerHTML = (anime.genres || []).map(g => `<span class="px-3 py-1 bg-slate-700/50 rounded-full text-xs font-bold text-slate-300 border border-slate-600/50">${g.name}</span>`).join('');
-            document.getElementById('modal-synopsis').innerText = anime.synopsis || "No synopsis available.";
+            document.getElementById('modal-source-studio').innerText = `Studio: ${(anime.studios||[]).map(s=>s.name).join(', ') || 'N/A'} • Source: ${anime.source || 'N/A'} • Season: ${anime.season ? anime.season.charAt(0).toUpperCase() + anime.season.slice(1) : ''} ${anime.year || ''}`;
+            document.getElementById('modal-genres').innerHTML = (anime.genres || []).map(g => `<span class="px-2 py-1 bg-slate-700/50 rounded-md text-xs font-bold text-slate-300 border border-slate-600/50">${g.name}</span>`).join('');
             
+            // Synopsis Logic
+            fullSynopsisText = anime.synopsis || "No synopsis available.";
+            const btn = document.getElementById('read-more-btn');
+            if(fullSynopsisText.length > 180) {
+                isSynopsisTruncated = true;
+                document.getElementById('modal-synopsis').innerText = fullSynopsisText.substring(0, 180) + '...';
+                btn.innerText = ' Read More';
+                btn.classList.remove('hidden');
+            } else {
+                document.getElementById('modal-synopsis').innerText = fullSynopsisText;
+                btn.classList.add('hidden');
+            }
+            
+            // Trailer
             const tc = document.getElementById('modal-trailer');
             tc.innerHTML = anime.trailer.embed_url ? `<iframe src="${anime.trailer.embed_url}" allowfullscreen class="w-full h-full"></iframe>` : '<div class="w-full h-full flex items-center justify-center text-slate-500">No trailer available</div>';
 
+            // Buttons
             const acts = document.getElementById('modal-actions');
             if(anime.type === 'Movie' || anime.episodes === 1) {
                 acts.innerHTML = `
-                    <button id="btn-completed" class="w-full py-3 rounded-xl font-bold bg-green-600 hover:bg-green-500 text-white transition-all active:scale-95 disabled:opacity-50" onclick="updateListStatus('completed')" ${anime.status !== 'Finished Airing' ? 'disabled' : ''}>✔ Completed</button>
+                    <button id="btn-completed" class="w-full py-3 rounded-xl font-bold bg-green-600 hover:bg-green-500 text-white transition-all active:scale-95 disabled:opacity-30" onclick="updateListStatus('completed')" ${anime.status !== 'Finished Airing' ? 'disabled title="Not aired yet"' : ''}>✔ Completed</button>
                     <button id="btn-planned" class="w-full py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all active:scale-95" onclick="updateListStatus('planned')">🗓 Going to Watch</button>
                 `;
             } else {
                 acts.innerHTML = `
-                    <button id="btn-completed" class="w-full py-3 rounded-xl font-bold bg-green-600 hover:bg-green-500 text-white transition-all active:scale-95 disabled:opacity-50" onclick="updateListStatus('completed')" ${anime.status !== 'Finished Airing' ? 'disabled' : ''}>✔ Completed</button>
-                    <button id="btn-watching" class="w-full py-3 rounded-xl font-bold bg-orange-600 hover:bg-orange-500 text-white transition-all active:scale-95 disabled:opacity-50" onclick="updateListStatus('watching')" ${(anime.status === 'Not yet aired' || anime.status === 'Upcoming') ? 'disabled' : ''}>▶ Watching</button>
+                    <button id="btn-completed" class="w-full py-3 rounded-xl font-bold bg-green-600 hover:bg-green-500 text-white transition-all active:scale-95 disabled:opacity-30" onclick="updateListStatus('completed')" ${anime.status !== 'Finished Airing' ? 'disabled title="Anime has not finished airing"' : ''}>✔ Completed</button>
+                    <button id="btn-watching" class="w-full py-3 rounded-xl font-bold bg-orange-600 hover:bg-orange-500 text-white transition-all active:scale-95 disabled:opacity-30" onclick="updateListStatus('watching')" ${(anime.status === 'Not yet aired' || anime.status === 'Upcoming') ? 'disabled title="Not aired yet"' : ''}>▶ Watching</button>
                     <button id="btn-planned" class="w-full py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all active:scale-95" onclick="updateListStatus('planned')">🗓 Going to Watch</button>
                 `;
             }
 
             refreshModalButtons();
             lucide.createIcons();
-            
             DOM.modal.classList.remove('hidden');
             DOM.modal.classList.add('flex');
-            setTimeout(() => {
-                DOM.modalBox.classList.remove('scale-95', 'opacity-0');
-                DOM.modalBox.classList.add('scale-100', 'opacity-100');
-            }, 10);
+            document.getElementById('modal-body-scroll').scrollTop = 0;
         }
 
         window.closeModal = () => {
-            DOM.modalBox.classList.remove('scale-100', 'opacity-100');
-            DOM.modalBox.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                DOM.modal.classList.add('hidden');
-                DOM.modal.classList.remove('flex');
-                document.getElementById('modal-trailer').innerHTML = ''; // Stop video audio
-            }, 300);
+            DOM.modal.classList.add('hidden');
+            DOM.modal.classList.remove('flex');
+            document.getElementById('modal-trailer').innerHTML = ''; 
         }
 
-        // Infinite Scroll Observer
+        // --- INFINITE SCROLL ---
         function setupIntersectionObserver() {
             const observer = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && infiniteScrollEnabled && !isFetching) {
