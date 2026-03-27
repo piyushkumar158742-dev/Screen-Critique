@@ -144,7 +144,7 @@
 
             <div id="modal-body-scroll" class="w-full h-full overflow-y-auto flex flex-col md:flex-row relative">
                 
-                <div class="w-full md:w-[320px] bg-slate-900/50 p-6 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-700/50 shrink-0 h-max">
+                <div class="w-full md:w-[320px] bg-slate-900/50 p-6 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-700/50 shrink-0">
                     <img id="modal-img" class="w-[60%] sm:w-[220px] md:w-full rounded-2xl shadow-2xl object-cover" src="">
                     <div id="modal-actions" class="w-full mt-6 flex flex-col gap-3 max-w-[220px] md:max-w-full"></div>
                 </div>
@@ -171,7 +171,7 @@
                         </p>
                     </div>
 
-                    <div id="modal-trailer" class="w-full aspect-video rounded-xl overflow-hidden bg-black mt-4 border border-slate-700/50 shadow-lg"></div>
+                    <div id="modal-trailer" class="w-full aspect-video shrink-0 rounded-xl overflow-hidden bg-black mt-4 border border-slate-700/50 shadow-lg"></div>
                 </div>
             </div>
         </div>
@@ -192,7 +192,6 @@
         let infiniteScrollEnabled = true;
         let searchDebounceTimer;
 
-        // BANNED & DUPLICATES
         function isBanned(anime) {
             return (anime.title_english || anime.title || '').toLowerCase().includes('steel ball run');
         }
@@ -217,7 +216,6 @@
             scrollContainer: document.getElementById('scroll-container')
         };
 
-        // --- INIT & PRELOAD ---
         document.addEventListener('DOMContentLoaded', () => {
             loadCategory('home', true);
             setupIntersectionObserver();
@@ -227,7 +225,7 @@
             }, 2500);
         });
 
-        // --- NAVIGATION LOGIC (Fix 1) ---
+        // --- NAVIGATION FIX ---
         const goHome = () => {
             DOM.mobileNavMenu.classList.remove('show');
             DOM.searchBox.value = ''; DOM.searchSuggestions.classList.add('hidden');
@@ -240,21 +238,29 @@
 
         function highlightNav(cat) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.tagName.toLowerCase() === 'button') {
-                    if(btn.parentElement.id === 'nav-list-desktop') {
-                        btn.classList.remove('bg-slate-800/50', 'text-white'); btn.classList.add('text-slate-400');
-                        btn.querySelector('i').classList.remove('text-brand-400');
+                const isDesktop = btn.closest('#nav-list-desktop') !== null;
+                
+                // Reset all
+                if (isDesktop) {
+                    btn.classList.remove('bg-slate-800/50', 'text-white'); 
+                    btn.classList.add('text-slate-400');
+                    const icon = btn.querySelector('i');
+                    if(icon) icon.classList.remove('text-brand-400');
+                } else {
+                    btn.classList.remove('text-brand-400', 'font-bold'); 
+                    btn.classList.add('text-slate-300');
+                }
+                
+                // Highlight active
+                if (cat && btn.getAttribute('data-category') === cat) {
+                    if (isDesktop) {
+                        btn.classList.remove('text-slate-400'); 
+                        btn.classList.add('bg-slate-800/50', 'text-white');
+                        const icon = btn.querySelector('i');
+                        if(icon) icon.classList.add('text-brand-400');
                     } else {
-                        btn.classList.remove('text-brand-400', 'font-bold'); btn.classList.add('text-slate-300');
-                    }
-                    
-                    if(btn.getAttribute('data-category') === cat) {
-                        if(btn.parentElement.id === 'nav-list-desktop') {
-                            btn.classList.remove('text-slate-400'); btn.classList.add('bg-slate-800/50', 'text-white');
-                            btn.querySelector('i').classList.add('text-brand-400');
-                        } else {
-                            btn.classList.remove('text-slate-300'); btn.classList.add('text-brand-400', 'font-bold');
-                        }
+                        btn.classList.remove('text-slate-300'); 
+                        btn.classList.add('text-brand-400', 'font-bold');
                     }
                 }
             });
@@ -276,7 +282,7 @@
 
         DOM.mobileMenuBtn.addEventListener('click', () => DOM.mobileNavMenu.classList.toggle('show'));
 
-        // --- SEARCH (Fix 5 & 8) ---
+        // --- SEARCH ---
         DOM.searchBox.addEventListener('input', (e) => {
             clearTimeout(searchDebounceTimer);
             const query = e.target.value.trim();
@@ -291,7 +297,6 @@
                         results.forEach(anime => {
                             const item = document.createElement('div');
                             item.className = 'suggestion-item hover:bg-slate-700/50 p-2 border-b border-slate-700 flex items-center gap-3 cursor-pointer';
-                            // FIX 8: Removed Star rating from here
                             item.innerHTML = `<img src="${anime.images.jpg.image_url}" class="w-10 h-12 object-cover rounded">
                                               <span class="font-bold text-sm text-white">${anime.title_english || anime.title}</span>`;
                             item.onclick = () => { DOM.searchSuggestions.classList.add('hidden'); openModal(anime); };
@@ -305,17 +310,19 @@
 
         DOM.searchBox.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && DOM.searchBox.value.trim()) {
-                DOM.searchBox.blur(); // hides mobile keyboard
+                DOM.searchBox.blur(); 
                 const query = DOM.searchBox.value.trim();
                 DOM.searchSuggestions.classList.add('hidden');
                 DOM.mobileNavMenu.classList.remove('show');
-                highlightNav('');
                 
-                DOM.heroContainer.classList.add('hidden'); // FIX 5: Ensure hero hides
+                highlightNav(''); // Safely clears nav highlights
+                
+                DOM.heroContainer.classList.add('hidden'); 
                 DOM.myListContainer.classList.add('hidden');
                 DOM.mainGrid.classList.remove('hidden');
                 DOM.gridTitle.innerHTML = `<span class="w-2 h-8 rounded-full bg-brand-500"></span> Results for "${query}"`;
-                currentCategory = 'search'; infiniteScrollEnabled = false;
+                currentCategory = 'search';
+                infiniteScrollEnabled = false;
                 
                 DOM.loadingTrigger.classList.add('hidden');
                 DOM.mainGrid.innerHTML = '<div class="col-span-full flex justify-center py-10"><i data-lucide="loader-2" class="w-8 h-8 text-brand-500 animate-spin"></i></div>';
@@ -344,6 +351,7 @@
                 DOM.mainGrid.classList.remove('hidden'); DOM.myListContainer.classList.add('hidden');
                 infiniteScrollEnabled = (catKey !== 'pick'); 
                 if (infiniteScrollEnabled) DOM.loadingTrigger.classList.remove('hidden');
+                else DOM.loadingTrigger.classList.add('hidden');
             }
 
             let rawAnimes = []; let isRanked = false;
@@ -495,7 +503,7 @@
             setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('toast-enter'); }, 3000);
         }
 
-        // --- MODAL (Line-by-Line & Fixes 2,3,4,6,7,11,12,13) ---
+        // --- MODAL ---
         window.toggleSynopsis = function() {
             const el = document.getElementById('modal-synopsis');
             const btn = document.getElementById('read-more-btn');
@@ -511,7 +519,6 @@
             document.getElementById('modal-img').src = anime.images.jpg.large_image_url;
             document.getElementById('modal-title').innerText = anime.title_english || anime.title;
             
-            // FIX 3, 7 & 11: Line by Line details
             document.getElementById('modal-score').innerHTML = `<i data-lucide="star" class="w-4 h-4"></i> ${anime.score || 'N/A'}`;
             document.getElementById('modal-status').innerText = anime.status || 'N/A';
             let releaseDate = "TBA";
@@ -523,7 +530,6 @@
             document.getElementById('modal-source').innerText = anime.source || 'N/A';
             document.getElementById('modal-genres').innerHTML = (anime.genres || []).map(g => `<span class="px-2 py-0.5 bg-slate-800 rounded border border-slate-700">${g.name}</span>`).join('');
             
-            // FIX 12: Synopsis
             fullSynopsisText = anime.synopsis || "No synopsis available.";
             const btn = document.getElementById('read-more-btn');
             if(fullSynopsisText.length > 180) {
@@ -535,7 +541,6 @@
                 btn.classList.add('hidden');
             }
             
-            // FIX 6 & 13: 16:9 Trailer
             const tc = document.getElementById('modal-trailer');
             tc.innerHTML = anime.trailer.embed_url ? `<iframe src="${anime.trailer.embed_url}" allowfullscreen class="w-full h-full"></iframe>` : '<div class="w-full h-full flex items-center justify-center text-slate-500">No trailer available</div>';
 
