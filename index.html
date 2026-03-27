@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     
     <style>
-        /* Universal reset completely kills rogue white lines, gaps, and borders */
+        /* CSS Reset to eliminate all rogue white lines and margins */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +34,6 @@
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
-            overflow: hidden;
         }
 
         header {
@@ -42,16 +41,19 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 2rem;
+            border-bottom: 1px solid #2a2d36;
+            padding-bottom: 1rem;
         }
 
         .logo {
             width: 48px;
             height: 48px;
             border-radius: 8px;
+            object-fit: cover;
         }
 
-        /* Loading Overlay Styles */
-        #loading-overlay {
+        /* Loading State Overlay */
+        #processing-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -65,10 +67,11 @@
             z-index: 10;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
+            border-radius: 16px;
         }
 
-        #loading-overlay.visible {
+        #processing-overlay.visible {
             opacity: 1;
             pointer-events: all;
         }
@@ -103,6 +106,7 @@
             max-width: 100%;
             max-height: 600px;
             object-fit: contain;
+            display: block;
         }
 
         .toolbar {
@@ -124,6 +128,7 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
             font-size: 1rem;
+            text-align: center;
         }
 
         button:hover:not(:disabled), .custom-file-upload:hover {
@@ -144,16 +149,16 @@
 <body>
     <div class="app-wrapper">
         <header>
-            <img src="logo.png" alt="Logo" class="logo">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
             <h1>Photo Filter Studio</h1>
         </header>
 
-        <main>
-            <div id="loading-overlay" class="visible">
-                <div class="spinner"></div>
-                <p>Initializing Engine...</p>
-            </div>
+        <div id="processing-overlay">
+            <div class="spinner"></div>
+            <p>Applying Filter...</p>
+        </div>
 
+        <main>
             <div class="workspace">
                 <canvas id="editor-canvas"></canvas>
             </div>
@@ -170,24 +175,18 @@
         </main>
     </div>
     
-    <script src="filter.js"></script>
-    
     <script>
+        // DOM Elements
         const canvas = document.getElementById('editor-canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const uploadInput = document.getElementById('image-upload');
         const applyBtn = document.getElementById('apply-filter');
         const downloadBtn = document.getElementById('download-btn');
-        const loadingOverlay = document.getElementById('loading-overlay');
+        const processingOverlay = document.getElementById('processing-overlay');
 
         let currentImage = null;
 
-        // Wait for the Emscripten Module to initialize
-        var Module = Module || {};
-        Module.onRuntimeInitialized = () => {
-            loadingOverlay.classList.remove('visible');
-        };
-
+        // Handle Image Upload
         uploadInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -196,10 +195,15 @@
             reader.onload = (event) => {
                 const img = new Image();
                 img.onload = () => {
+                    // Set canvas dimensions to match image
                     canvas.width = img.width;
                     canvas.height = img.height;
+                    
+                    // Draw image to canvas
                     ctx.drawImage(img, 0, 0);
                     currentImage = img;
+                    
+                    // Enable buttons
                     applyBtn.disabled = false;
                     downloadBtn.disabled = false;
                 };
@@ -208,36 +212,49 @@
             reader.readAsDataURL(file);
         });
 
+        // Apply Pure JavaScript Filter
         applyBtn.addEventListener('click', () => {
             if (!currentImage) return;
             
-            loadingOverlay.classList.add('visible');
-            loadingOverlay.querySelector('p').innerText = "Processing Image...";
+            // Show processing UI
+            processingOverlay.classList.add('visible');
 
+            // Use a short timeout to let the browser render the overlay before freezing to process pixels
             setTimeout(() => {
                 const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imgData.data;
                 
-                const numBytes = data.length * data.BYTES_PER_ELEMENT;
-                const ptr = Module._malloc(numBytes);
-                Module.HEAPU8.set(data, ptr);
+                // Loop through every pixel (RGBA)
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i];
+                    let g = data[i + 1];
+                    let b = data[i + 2];
+                    
+                    // Calculate grayscale luminance
+                    let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    
+                    // Boost contrast slightly for a professional finish
+                    let contrast = (gray - 128) * 1.2 + 128;
+                    
+                    // Clamp values between 0 and 255
+                    contrast = Math.max(0, Math.min(255, contrast));
+                    
+                    // Reassign the modified values
+                    data[i] = contrast;     // Red
+                    data[i + 1] = contrast; // Green
+                    data[i + 2] = contrast; // Blue
+                    // data[i + 3] is Alpha, leave it unchanged
+                }
 
-                Module.ccall(
-                    'process_image',
-                    null,
-                    ['number', 'number', 'number'],
-                    [ptr, canvas.width, canvas.height]
-                );
-
-                const resultView = new Uint8Array(Module.HEAPU8.buffer, ptr, numBytes);
-                data.set(resultView);
+                // Put the modified pixels back onto the canvas
                 ctx.putImageData(imgData, 0, 0);
 
-                Module._free(ptr);
-                loadingOverlay.classList.remove('visible');
+                // Hide processing UI
+                processingOverlay.classList.remove('visible');
             }, 50);
         });
 
+        // Handle Download
         downloadBtn.addEventListener('click', () => {
             const link = document.createElement('a');
             link.download = 'filtered-photo.png';
